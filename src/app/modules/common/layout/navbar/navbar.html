@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm custom-navbar">
+  <div class="container-fluid px-3">
+    
+    <!-- Mobile Toggle Button -->
+    <button 
+      class="navbar-toggler border-0 shadow-none p-2" 
+      type="button" 
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarContent" 
+      aria-controls="navbarContent" 
+      aria-expanded="false" 
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <!-- Left Links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-1 align-items-lg-center fw-medium">
+        <li class="nav-item">
+          <a class="nav-link px-3 d-inline-flex align-items-center gap-2" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-house-door-fill"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/about" routerLinkActive="active">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/cars" routerLinkActive="active">Car</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3" routerLink="/search" routerLinkActive="active">Search</a>
+        </li>
+      </ul>
+
+      <!-- Right User / Auth Actions -->
+      <div class="d-flex align-items-center gap-3" *ngIf="{ route: currentRoute$ | async } as ctx">
+        
+        <!-- Login Button -->
+        <a 
+          routerLink="/login" 
+          class="btn btn-light text-primary rounded-pill px-4 fw-semibold shadow-sm login-btn" 
+          *ngIf="!(isLoggedIn$ | async) && !ctx.route?.startsWith('/signup') && !ctx.route?.startsWith('/login')">
+          Login
+        </a>
+
+        <!-- Profile Dropdown -->
+        <div class="dropdown" *ngIf="isLoggedIn$ | async">
+          <button 
+            class="btn btn-link text-white text-decoration-none dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 rounded-pill profile-btn shadow-none" 
+            type="button" 
+            id="userMenu" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false">
+            <i class="bi bi-person-circle fs-5"></i>
+            <span class="fw-semibold small">Hello, {{ username$ | async }}</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 py-2" aria-labelledby="userMenu">
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" routerLink="/dashboard/profile">
+                <i class="bi bi-person text-secondary"></i> My Profile
+              </a>
+            </li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li>
+              <button class="dropdown-item text-danger d-flex align-items-center gap-2 py-2" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i> Logout
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</nav>

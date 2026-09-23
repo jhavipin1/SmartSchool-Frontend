@@ -1,0 +1,128 @@
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: transparent !important;
+}
+
+.dashboard-container {
+  background-color: transparent !important;
+}
+
+/* Sidebar Structure */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  z-index: 1000;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03);
+  background-color: transparent !important;
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+  min-width: var(--sidebar-collapsed-width);
+}
+
+.sidebar-header {
+  height: 65px;
+  background-color: transparent !important;
+}
+
+/* Header Elements */
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--brand-gradient) !important;
+}
+
+.toggle-btn {
+  background-color: rgba(248, 250, 252, 0.5) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  width: 34px !important;
+  height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #64748b !important;
+}
+
+.toggle-btn:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Sidebar Nav Item Styling */
+.sidebar-nav,
+mat-nav-list {
+  background-color: transparent !important;
+}
+
+.nav-link-custom {
+  border-radius: 10px !important;
+  color: #475569 !important;
+  margin-bottom: 3px;
+  transition: all 0.2s ease-in-out !important;
+  height: 44px !important;
+  background-color: transparent !important;
+}
+
+.nav-link-custom:hover {
+  background-color: rgba(241, 245, 249, 0.6) !important;
+  color: #0f172a !important;
+}
+
+.nav-link-custom.active {
+  background: var(--brand-gradient) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(14, 89, 142, 0.25);
+}
+
+.nav-link-custom.active mat-icon {
+  color: #ffffff !important;
+}
+
+.sidebar-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+}
+
+/* Collapsed Responsive Fixes */
+.sidebar.collapsed .nav-link-custom {
+  display: flex;
+  justify-content: center;
+  padding: 0 !important;
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center !important;
+  padding: 1rem 0.5rem !important;
+}
+
+/* Logout Customization */
+.logout-link:hover {
+  background-color: rgba(254, 242, 242, 0.7) !important;
+}
+
+/* Content Area & Navbar Transparency */
+.main-wrapper {
+  min-width: 0; 
+  height: 100vh;
+  background-color: transparent !important;
+}
+
+.navbar {
+  background-color: transparent !important;
+}
+
+.content-area {
+  background-color: transparent !important;
+}
+
+.fs-7 {
+  font-size: 0.725rem;
+  letter-spacing: 0.5px;
+}

@@ -1,0 +1,110 @@
+<div class="d-flex justify-content-end align-items-center min-vh-100 pe-md-4 bg-light-subtle">
+  <div class="card border-0 shadow-lg rounded-4 signup-card w-100">
+    <div class="card-body p-4 p-sm-4">
+      
+      <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="d-flex flex-column gap-3">
+        
+        <!-- Text Logo Banner -->
+        <div class="text-center my-2">
+          <div class="d-inline-flex align-items-center justify-content-center p-3 rounded-circle bg-success-subtle text-success mb-2 shadow-sm brand-icon-wrapper">
+            <i class="bi bi-person-plus-fill fs-2"></i>
+          </div>
+          <h1 class="h4 fw-bold text-dark mb-1 tracking-tight">
+            Create <span class="text-success">Account</span>
+          </h1>
+          <p class="text-muted small mb-0">Join us today to get started.</p>
+        </div>
+
+        <!-- Name -->
+        <div>
+          <label class="form-label fw-medium text-secondary small">Name</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+              <i class="bi bi-person"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control border-start-0 ps-0"
+              [(ngModel)]="registerData.fullName"
+              formControlName="name"
+              placeholder="Enter your name"
+              [class.is-invalid]="signupForm.get('name')?.touched && signupForm.get('name')?.invalid"
+            />
+          </div>
+          @if (signupForm.get('name')?.touched && signupForm.get('name')?.hasError('required')) {
+            <div class="invalid-feedback d-block">
+              Name is required
+            </div>
+          }
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="form-label fw-medium text-secondary small">Email</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+              <i class="bi bi-envelope"></i>
+            </span>
+            <input
+              type="email"
+              class="form-control border-start-0 ps-0"
+              [(ngModel)]="registerData.email"
+              formControlName="email"
+              placeholder="Enter your email"
+              [class.is-invalid]="signupForm.get('email')?.touched && signupForm.get('email')?.invalid"
+            />
+          </div>
+          @if (signupForm.get('email')?.touched && signupForm.get('email')?.hasError('required')) {
+            <div class="invalid-feedback d-block">
+              Email is required
+            </div>
+          }
+          @if (signupForm.get('email')?.touched && signupForm.get('email')?.hasError('email')) {
+            <div class="invalid-feedback d-block">
+              Invalid email format
+            </div>
+          }
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="form-label fw-medium text-secondary small">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+              <i class="bi bi-lock"></i>
+            </span>
+            <input
+              type="password"
+              class="form-control border-start-0 ps-0"
+              [(ngModel)]="registerData.password"
+              formControlName="password"
+              placeholder="Enter your password"
+              [class.is-invalid]="signupForm.get('password')?.touched && signupForm.get('password')?.invalid"
+            />
+          </div>
+          @if (signupForm.get('password')?.touched && signupForm.get('password')?.hasError('required')) {
+            <div class="invalid-feedback d-block">
+              Password is required
+            </div>
+          }
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="btn btn-success w-100 py-2 fw-semibold shadow-sm mt-2 rounded-3"
+          [disabled]="signupForm.invalid"
+        >
+          Signup
+        </button>
+
+        <!-- Extra Links -->
+        <div class="text-center small text-secondary mt-2">
+          Already have an account?
+          <a routerLink="/login" class="text-decoration-none fw-semibold text-success ms-1">Login Here</a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

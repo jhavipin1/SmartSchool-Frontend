@@ -1,0 +1,32 @@
+/* Card Container Bounds */
+.login-card {
+  max-width: 380px;
+}
+
+/* Brand Icon & Typography Styling */
+.brand-icon-wrapper {
+  width: 64px;
+  height: 64px;
+}
+
+.tracking-tight {
+  letter-spacing: -0.5px;
+}
+
+/* Form Controls Polish */
+.input-group-text {
+  border-color: #dee2e6;
+}
+
+.form-control {
+  border-color: #dee2e6;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #86b7fe;
+}
+
+.input-group:focus-within .input-group-text {
+  border-color: #86b7fe;
+}

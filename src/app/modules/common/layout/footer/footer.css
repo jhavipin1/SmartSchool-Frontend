@@ -1,0 +1,13 @@
+.footer-toolbar {
+  background: var(--brand-gradient);
+  min-height: 48px;
+}
+
+.opacity-100-hover {
+  transition: opacity 0.2s ease, text-decoration 0.2s ease;
+}
+
+.opacity-100-hover:hover {
+  opacity: 1 !important;
+  text-decoration: underline !important;
+}

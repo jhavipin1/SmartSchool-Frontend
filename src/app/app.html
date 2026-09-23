@@ -1,0 +1,14 @@
+<div class="d-flex flex-column min-vh-100">
+  @if (!isExamMode) {
+    <app-header></app-header>
+    <app-navbar></app-navbar>
+  }
+
+  <main class="flex-grow-1" [class.p-4]="!isExamMode" [class.p-0]="isExamMode">
+    <router-outlet></router-outlet>
+  </main>
+
+  @if (!isExamMode) {
+    <app-footer></app-footer>
+  }
+</div>

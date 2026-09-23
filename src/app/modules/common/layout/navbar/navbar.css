@@ -1,0 +1,56 @@
+.custom-navbar {
+  background: var(--brand-gradient);
+  min-height: 56px;
+}
+
+.custom-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.88);
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link.active {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.login-btn {
+  transition: all 0.2s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.profile-btn {
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+}
+
+.profile-btn:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.dropdown-menu {
+  border-radius: 12px;
+  min-width: 180px;
+}
+
+.dropdown-item {
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  margin: 0 4px;
+  width: calc(100% - 8px);
+}
+
+.dropdown-item:hover {
+  background-color: #f1f5f9;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #fef2f2;
+}

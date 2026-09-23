@@ -1,0 +1,148 @@
+<div class="dashboard-container d-flex vh-100 overflow-hidden">
+  <!-- Sidebar Navigation -->
+  <aside
+    class="sidebar border-end d-flex flex-column flex-shrink-0 transition-all"
+    [class.collapsed]="collapsed"
+  >
+    <!-- Sidebar Header -->
+    <div class="sidebar-header d-flex align-items-center justify-content-between p-3 border-bottom">
+      <div class="d-flex align-items-center gap-2 overflow-hidden" *ngIf="!collapsed">
+        <div
+          class="brand-icon bg-primary text-white rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+        >
+          <mat-icon class="m-0 fs-5">space_dashboard</mat-icon>
+        </div>
+        <span class="fw-bold text-dark sidebar-text fs-6">AppLogo</span>
+      </div>
+      <button
+        mat-icon-button
+        (click)="toggleCollapse()"
+        aria-label="Toggle navigation drawer"
+        type="button"
+        class="toggle-btn flex-shrink-0"
+        [class.ms-auto]="!collapsed"
+        [class.mx-auto]="collapsed"
+      >
+        <mat-icon>{{ collapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+      </button>
+    </div>
+
+    <!-- Navigation List -->
+    <mat-nav-list class="sidebar-nav flex-column mb-auto p-2 gap-1 overflow-x-hidden">
+      <!-- User Links -->
+      <ng-container *ngIf="isUser">
+        <a mat-list-item routerLink="user" routerLinkActive="active" class="nav-link-custom">
+          <mat-icon matListItemIcon>dashboard</mat-icon>
+          <span matListItemTitle class="sidebar-text" *ngIf="!collapsed">Dashboard</span>
+        </a>
+       
+        <a mat-list-item routerLink="profile" routerLinkActive="active" class="nav-link-custom">
+          <mat-icon matListItemIcon>account_circle</mat-icon>
+          <span matListItemTitle class="sidebar-text" *ngIf="!collapsed">Profile</span>
+        </a>
+      </ng-container>
+
+      <!-- Admin Link -->
+      <a
+        *ngIf="isAdmin"
+        mat-list-item
+        routerLink="admin"
+        routerLinkActive="active"
+        class="nav-link-custom"
+      >
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle class="sidebar-text" *ngIf="!collapsed">Admin Dashboard</span>
+      </a>
+
+      <!-- Super Admin Link -->
+      <a
+        *ngIf="isSuperAdmin"
+        mat-list-item
+        routerLink="superadmin"
+        routerLinkActive="active"
+        class="nav-link-custom"
+      >
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle class="sidebar-text" *ngIf="!collapsed">Super Admin Dashboard</span>
+      </a>
+
+      <!-- Admin/SuperAdmin Management Links -->
+      <ng-container *ngIf="isAdminOrSuperAdmin">
+        <a mat-list-item routerLink="categories" routerLinkActive="active" class="nav-link-custom">
+          <mat-icon matListItemIcon>category</mat-icon>
+          <span matListItemTitle class="sidebar-text" *ngIf="!collapsed">Categories</span>
+        </a>
+
+        <a mat-list-item routerLink="quizzes" routerLinkActive="active" class="nav-link-custom">
+          <mat-icon matListItemIcon>quiz</mat-icon>
+          <span matListItemTitle class="sidebar-text" *ngIf="!collapsed">Quizzes</span>
+        </a>
+
+        <!-- Question Management Links -->
+        <a
+          mat-list-item
+          routerLink="questions"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link-custom"
+        >
+          <mat-icon matListItemIcon>help_outline</mat-icon>
+          <span matListItemTitle class="sidebar-text" *ngIf="!collapsed">Questions</span>
+        </a>
+
+        <a
+          mat-list-item
+          routerLink="forgotpassword"
+          routerLinkActive="active"
+          class="nav-link-custom"
+        >
+          <mat-icon matListItemIcon>security</mat-icon>
+          <span matListItemTitle class="sidebar-text" *ngIf="!collapsed">
+            {{ isAdmin ? 'Admin Tool' : 'Super Admin Tool' }}
+          </span>
+        </a>
+      </ng-container>
+    </mat-nav-list>
+
+    <!-- Sidebar Bottom Logout -->
+    <div class="mt-auto p-2 border-top">
+      <a
+        mat-list-item
+        (click)="authService.logout()"
+        routerLink="/login"
+        class="nav-link-custom logout-link"
+      >
+        <mat-icon matListItemIcon class="text-danger">logout</mat-icon>
+        <span matListItemTitle class="sidebar-text text-danger fw-semibold" *ngIf="!collapsed"
+          >Logout</span
+        >
+      </a>
+    </div>
+  </aside>
+
+  <!-- Right Content Viewport -->
+  <div class="main-wrapper d-flex flex-column flex-grow-1 overflow-hidden">
+    <!-- Top Action Toolbar -->
+    <nav class="navbar navbar-expand px-4 py-3 shadow-sm sticky-top">
+      <div class="container-fluid p-0 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <span class="fs-6 text-secondary fw-medium">
+            Welcome, <strong class="text-dark">{{ authService.getFullName() }}</strong>
+          </span>
+          <span
+            class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-semibold text-uppercase fs-7 ms-2"
+          >
+            {{ userRole }}
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Dynamic Route View -->
+    <main class="content-area flex-grow-1 p-4 overflow-auto">
+      <div class="container-fluid p-0">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>
