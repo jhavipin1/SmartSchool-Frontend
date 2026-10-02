@@ -1,1 +1,173 @@
-<p>teachers-timetable works!</p>
+<div
+  class="p-6 bg-slate-100 min-h-screen text-xs text-slate-700 font-sans space-y-4"
+>
+  <!-- MAIN CARD CONTAINER -->
+  <div
+    class="bg-white rounded-md border border-slate-200 shadow-sm p-5 space-y-5"
+  >
+    <!-- HEADER TITLE -->
+    <h1
+      class="text-sm font-semibold text-slate-800 border-b border-slate-100 pb-3"
+    >
+      Teacher Time Table
+    </h1>
+
+    <!-- SELECT TEACHER SEARCH FORM -->
+    <form [formGroup]="filterForm" (ngSubmit)="onSearch()" class="space-y-4">
+      <div
+        class="flex flex-col sm:flex-row sm:items-end space-y-3 sm:space-y-0 sm:space-x-3"
+      >
+        <div class="w-full sm:w-80">
+          <label class="block font-medium text-slate-700 mb-1">
+            Teachers <span class="text-red-500">*</span>
+          </label>
+          <select
+            formControlName="teacherId"
+            class="w-full h-9 px-3 border border-slate-300 rounded outline-none focus:border-indigo-500 bg-white text-slate-700"
+          >
+            <option *ngFor="let t of teachers" [value]="t.id">
+              {{ t.name }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 h-9 rounded transition shadow-sm"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- PRINT ICON ACTION -->
+    <div class="flex justify-end pt-2">
+      <button
+        (click)="printTimetable()"
+        title="Print Timetable"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white p-1.5 rounded transition shadow-xs"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- WEEKLY TIMETABLE GRID -->
+    <div class="overflow-x-auto pb-4">
+      <div class="grid grid-cols-1 md:grid-cols-7 gap-3 min-w-[900px]">
+        <div *ngFor="let dayItem of currentSchedule" class="space-y-3">
+          <!-- Day Name Header -->
+          <div
+            class="bg-slate-50 border border-slate-200 text-center py-2 font-semibold text-slate-700 rounded-t"
+          >
+            {{ dayItem.day }}
+          </div>
+
+          <!-- Slots List -->
+          <div class="space-y-2">
+            <!-- Class Slot Card -->
+            <div
+              *ngFor="let slot of dayItem.slots"
+              class="bg-slate-50 border border-slate-200 rounded p-2.5 text-[11px] space-y-1.5 shadow-xs hover:border-indigo-300 transition"
+            >
+              <!-- Class Name -->
+              <div
+                class="font-medium text-emerald-600 flex items-center space-x-1.5"
+              >
+                <svg
+                  class="w-3.5 h-3.5 text-slate-500 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
+                </svg>
+                <span>Class: {{ slot.className }}</span>
+              </div>
+
+              <!-- Subject Name -->
+              <div class="font-medium text-emerald-600 pl-5">
+                {{ slot.subject }}
+              </div>
+
+              <!-- Time -->
+              <div class="text-slate-600 flex items-center space-x-1.5">
+                <svg
+                  class="w-3.5 h-3.5 text-slate-400 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{{ slot.timeFrom }} - {{ slot.timeTo }}</span>
+              </div>
+
+              <!-- Room Number -->
+              <div class="text-emerald-600 flex items-center space-x-1.5">
+                <svg
+                  class="w-3.5 h-3.5 text-slate-400 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+                <span>Room No.: {{ slot.roomNo }}</span>
+              </div>
+            </div>
+
+            <!-- Empty / Not Scheduled Card -->
+            <div
+              *ngIf="!dayItem.slots || dayItem.slots.length === 0"
+              class="bg-slate-50 border border-slate-200 rounded p-2.5 text-center text-red-500 font-medium flex items-center justify-center space-x-1"
+            >
+              <svg
+                class="w-3.5 h-3.5 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>Not Scheduled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

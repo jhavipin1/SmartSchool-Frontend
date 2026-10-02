@@ -1,1 +1,230 @@
-<p>issue-return works!</p>
+<div class="p-6 bg-slate-50 min-h-screen space-y-6">
+  <!-- MAIN CARD CONTAINER -->
+  <div
+    class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden"
+  >
+    <!-- CARD HEADER & TAB CONTROLS -->
+    <div class="bg-slate-100 px-6 pt-4 border-b border-slate-200">
+      <h3 class="text-base font-semibold text-slate-800 mb-3">
+        Library Management — Issue / Return
+      </h3>
+
+      <!-- Tabs -->
+      <div class="flex space-x-4">
+        <button
+          type="button"
+          (click)="switchTab('issue')"
+          [class.border-indigo-600]="activeTab === 'issue'"
+          [class.text-indigo-600]="activeTab === 'issue'"
+          [class.text-slate-500]="activeTab !== 'issue'"
+          class="pb-3 px-2 font-medium text-xs border-b-2 border-transparent hover:text-indigo-600 transition"
+        >
+          📖 Issue Book
+        </button>
+
+        <button
+          type="button"
+          (click)="switchTab('return')"
+          [class.border-indigo-600]="activeTab === 'return'"
+          [class.text-indigo-600]="activeTab === 'return'"
+          [class.text-slate-500]="activeTab !== 'return'"
+          class="pb-3 px-2 font-medium text-xs border-b-2 border-transparent hover:text-indigo-600 transition"
+        >
+          ↩️ Return Book
+        </button>
+      </div>
+    </div>
+
+    <!-- BODY CONTENT -->
+    <div class="p-6 space-y-4">
+      <!-- ALERT MESSAGES -->
+      <div
+        *ngIf="successMessage"
+        class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-md flex justify-between items-center"
+      >
+        <span>{{ successMessage }}</span>
+      </div>
+
+      <div
+        *ngIf="errorMessage"
+        class="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-md flex justify-between items-center"
+      >
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- FORM 1: ISSUE BOOK -->
+      <form
+        *ngIf="activeTab === 'issue'"
+        [formGroup]="issueForm"
+        (ngSubmit)="onIssueSubmit()"
+        class="space-y-4"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Library Card Number -->
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">
+              Library Card Number <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="libraryCardNo"
+              placeholder="e.g. CARD-2024-001"
+              class="w-full h-9 px-3 border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+            <span
+              *ngIf="
+                issueForm.get('libraryCardNo')?.invalid &&
+                issueForm.get('libraryCardNo')?.touched
+              "
+              class="text-[11px] text-red-500 mt-1 block"
+            >
+              Library Card Number is required
+            </span>
+          </div>
+
+          <!-- Book ID -->
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">
+              Book ID <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              formControlName="bookId"
+              placeholder="Enter Book ID"
+              class="w-full h-9 px-3 border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+            <span
+              *ngIf="
+                issueForm.get('bookId')?.invalid &&
+                issueForm.get('bookId')?.touched
+              "
+              class="text-[11px] text-red-500 mt-1 block"
+            >
+              Valid Book ID is required
+            </span>
+          </div>
+
+          <!-- Due Date -->
+          <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-slate-700 mb-1">
+              Due Date <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="date"
+              formControlName="dueDate"
+              class="w-full md:w-1/2 h-9 px-3 border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+            <span
+              *ngIf="
+                issueForm.get('dueDate')?.invalid &&
+                issueForm.get('dueDate')?.touched
+              "
+              class="text-[11px] text-red-500 mt-1 block"
+            >
+              Due date is required
+            </span>
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-3 border-t border-slate-100">
+          <button
+            type="submit"
+            [disabled]="isSubmitting"
+            class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded shadow-sm transition disabled:opacity-50"
+          >
+            {{ isSubmitting ? "Issuing..." : "Issue Book" }}
+          </button>
+        </div>
+      </form>
+
+      <!-- FORM 2: RETURN BOOK -->
+      <form
+        *ngIf="activeTab === 'return'"
+        [formGroup]="returnForm"
+        (ngSubmit)="onReturnSubmit()"
+        class="space-y-4"
+      >
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">
+            Issue Record ID <span class="text-red-500">*</span>
+          </label>
+          <input
+            type="number"
+            formControlName="issueRecordId"
+            placeholder="Enter Record ID (e.g. 101)"
+            class="w-full h-9 px-3 border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          />
+          <span
+            *ngIf="
+              returnForm.get('issueRecordId')?.invalid &&
+              returnForm.get('issueRecordId')?.touched
+            "
+            class="text-[11px] text-red-500 mt-1 block"
+          >
+            Valid Issue Record ID is required
+          </span>
+        </div>
+
+        <div class="flex justify-end pt-3 border-t border-slate-100">
+          <button
+            type="submit"
+            [disabled]="isSubmitting"
+            class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded shadow-sm transition disabled:opacity-50"
+          >
+            {{ isSubmitting ? "Processing Return..." : "Return Book" }}
+          </button>
+        </div>
+      </form>
+
+      <!-- TRANSACTION RESULT DETAILS PANEL -->
+      <div
+        *ngIf="lastRecord"
+        class="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-md text-xs space-y-1"
+      >
+        <h4
+          class="font-semibold text-slate-700 border-b border-slate-200 pb-1 mb-2"
+        >
+          Transaction Summary
+        </h4>
+        <div class="grid grid-cols-2 gap-2 text-slate-600">
+          <div>
+            <span class="font-medium text-slate-800">Record ID:</span> #{{
+              lastRecord.id
+            }}
+          </div>
+          <div>
+            <span class="font-medium text-slate-800">Card No:</span>
+            {{ lastRecord.libraryCardNo }}
+          </div>
+          <div>
+            <span class="font-medium text-slate-800">Book ID:</span>
+            {{ lastRecord.bookId }}
+          </div>
+          <div>
+            <span class="font-medium text-slate-800">Status:</span>
+            <span class="font-semibold text-indigo-600">{{
+              lastRecord.status || "PROCESSED"
+            }}</span>
+          </div>
+          <div>
+            <span class="font-medium text-slate-800">Issue Date:</span>
+            {{ lastRecord.issueDate }}
+          </div>
+          <div>
+            <span class="font-medium text-slate-800">Due Date:</span>
+            {{ lastRecord.dueDate }}
+          </div>
+          <div *ngIf="lastRecord.returnDate">
+            <span class="font-medium text-slate-800">Return Date:</span>
+            {{ lastRecord.returnDate }}
+          </div>
+          <div *ngIf="lastRecord.fineAmount !== undefined">
+            <span class="font-medium text-slate-800">Fine:</span> ${{
+              lastRecord.fineAmount
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,914 @@
-<p>student-admission works!</p>
+<div class="max-w-6xl mx-auto p-6 bg-slate-50 min-h-screen">
+  <div
+    class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-200"
+  >
+    <!-- Header -->
+    <div class="bg-indigo-600 px-6 py-4 flex items-center justify-between">
+      <h2 class="text-xl font-bold text-white">Student Registration Form</h2>
+      <span
+        class="text-xs font-semibold bg-indigo-500 text-white px-3 py-1 rounded-full uppercase tracking-wider"
+      >
+        SmartSchool ERP
+      </span>
+    </div>
+
+    <form
+      [formGroup]="studentForm"
+      (ngSubmit)="onSubmit()"
+      class="p-6 space-y-8"
+    >
+      <!-- SECTION 1: Personal Details -->
+      <div class="space-y-4">
+        <h3
+          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
+        >
+          <span
+            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
+            >01</span
+          >
+          Personal Details
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Admission No -->
+          <div>
+            <label
+              for="admissionNumber"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Admission No <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="admissionNumber"
+              type="text"
+              formControlName="admissionNumber"
+              class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              [ngClass]="
+                isInvalid('admissionNumber')
+                  ? 'border-red-500'
+                  : 'border-slate-300'
+              "
+            />
+            <p
+              *ngIf="isInvalid('admissionNumber')"
+              class="text-xs text-red-500 mt-1"
+            >
+              Admission number is required.
+            </p>
+          </div>
+
+          <!-- Roll Number -->
+          <div>
+            <label
+              for="rollNumber"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Roll Number
+            </label>
+            <input
+              id="rollNumber"
+              type="text"
+              formControlName="rollNumber"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          <!-- Date of Birth -->
+          <div>
+            <label
+              for="dateOfBirth"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Date of Birth <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input
+                id="dateOfBirth"
+                type="date"
+                #dobPicker
+                formControlName="dateOfBirth"
+                class="w-full px-3 py-2 pr-10 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer"
+                [ngClass]="
+                  isInvalid('dateOfBirth')
+                    ? 'border-red-500'
+                    : 'border-slate-300'
+                "
+              />
+              <button
+                type="button"
+                (click)="dobPicker.showPicker()"
+                class="absolute right-3 top-2.5 text-slate-400 hover:text-indigo-600 focus:outline-none"
+                aria-label="Open date picker"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-5 h-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                  />
+                </svg>
+              </button>
+            </div>
+            <p
+              *ngIf="isInvalid('dateOfBirth')"
+              class="text-xs text-red-500 mt-1"
+            >
+              Date of birth is required.
+            </p>
+          </div>
+
+          <!-- First Name -->
+          <div>
+            <label
+              for="firstName"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              First Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              [ngClass]="
+                isInvalid('firstName') ? 'border-red-500' : 'border-slate-300'
+              "
+            />
+            <p *ngIf="isInvalid('firstName')" class="text-xs text-red-500 mt-1">
+              First name is required.
+            </p>
+          </div>
+
+          <!-- Middle Name -->
+          <div>
+            <label
+              for="middleName"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Middle Name
+            </label>
+            <input
+              id="middleName"
+              type="text"
+              formControlName="middleName"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          <!-- Last Name -->
+          <div>
+            <label
+              for="lastName"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Last Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              [ngClass]="
+                isInvalid('lastName') ? 'border-red-500' : 'border-slate-300'
+              "
+            />
+            <p *ngIf="isInvalid('lastName')" class="text-xs text-red-500 mt-1">
+              Last name is required.
+            </p>
+          </div>
+
+          <!-- Gender -->
+          <div>
+            <label
+              for="gender"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Gender
+            </label>
+            <select
+              id="gender"
+              formControlName="gender"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+            >
+              <option value="">Select Gender</option>
+              <option *ngFor="let opt of genderOptions" [value]="opt">
+                {{ opt }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Category -->
+          <div>
+            <label
+              for="category"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Category
+            </label>
+            <select
+              id="category"
+              formControlName="category"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+            >
+              <option value="">Select Category</option>
+              <option *ngFor="let opt of categoryOptions" [value]="opt">
+                {{ opt }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Religion -->
+          <div>
+            <label
+              for="religion"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Religion
+            </label>
+            <select
+              id="religion"
+              formControlName="religion"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+            >
+              <option value="">Select Religion</option>
+              <option *ngFor="let opt of religionOptions" [value]="opt">
+                {{ opt }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Blood Group -->
+          <div>
+            <label
+              for="bloodGroup"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Blood Group
+            </label>
+            <select
+              id="bloodGroup"
+              formControlName="bloodGroup"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+            >
+              <option value="">Select Blood Group</option>
+              <option *ngFor="let opt of bloodGroupOptions" [value]="opt">
+                {{ opt }}
+              </option>
+            </select>
+          </div>
+
+          <!-- House -->
+          <div>
+            <label
+              for="house"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              House
+            </label>
+            <select
+              id="house"
+              formControlName="house"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+            >
+              <option value="">Select House</option>
+              <option *ngFor="let opt of houseOptions" [value]="opt">
+                {{ opt }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Academic Placement -->
+      <div class="space-y-4">
+        <h3
+          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
+        >
+          <span
+            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
+            >02</span
+          >
+          Academic Placement
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <!-- Class -->
+          <div>
+            <label
+              for="className"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Class
+            </label>
+            <select
+              id="className"
+              formControlName="className"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+            >
+              <option [ngValue]="null">Select Class</option>
+              <option *ngFor="let c of classList" [ngValue]="c">
+                {{ c.name }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Section -->
+          <div>
+            <label
+              for="section"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Section
+            </label>
+            <select
+              id="section"
+              formControlName="section"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+            >
+              <option [ngValue]="null">Select Section</option>
+              <option *ngFor="let s of sectionList" [ngValue]="s">
+                {{ s.name }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Admission Date -->
+          <div>
+            <label
+              for="admissionDate"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Admission Date
+            </label>
+            <div class="relative">
+              <input
+                id="admissionDate"
+                type="date"
+                #admissionPicker
+                formControlName="admissionDate"
+                class="w-full px-3 py-2 pr-10 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer"
+              />
+              <button
+                type="button"
+                (click)="admissionPicker.showPicker()"
+                class="absolute right-3 top-2.5 text-slate-400 hover:text-indigo-600 focus:outline-none"
+                aria-label="Open admission date picker"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-5 h-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Previous School -->
+          <div>
+            <label
+              for="previousSchool"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Previous School
+            </label>
+            <input
+              id="previousSchool"
+              type="text"
+              formControlName="previousSchool"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: Contact & Physical Metrics -->
+      <div class="space-y-4">
+        <h3
+          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
+        >
+          <span
+            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
+            >03</span
+          >
+          Contact & Physical Metrics
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Mobile No -->
+          <div>
+            <label
+              for="mobileNo"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Mobile No
+            </label>
+            <input
+              id="mobileNo"
+              type="text"
+              formControlName="mobileNo"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label
+              for="email"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          <!-- Library Card No -->
+          <div>
+            <label
+              for="libraryCardNo"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Library Card No
+            </label>
+            <input
+              id="libraryCardNo"
+              type="text"
+              formControlName="libraryCardNo"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          <!-- Height -->
+          <div>
+            <label
+              for="height"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Height (cm)
+            </label>
+            <input
+              id="height"
+              type="number"
+              step="0.01"
+              formControlName="height"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          <!-- Weight -->
+          <div>
+            <label
+              for="weight"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Weight (kg)
+            </label>
+            <input
+              id="weight"
+              type="number"
+              step="0.01"
+              formControlName="weight"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          <!-- Measurement Date -->
+          <div>
+            <label
+              for="measurementDate"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Measurement Date
+            </label>
+            <div class="relative">
+              <input
+                id="measurementDate"
+                type="date"
+                #measurementPicker
+                formControlName="measurementDate"
+                class="w-full px-3 py-2 pr-10 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer"
+              />
+              <button
+                type="button"
+                (click)="measurementPicker.showPicker()"
+                class="absolute right-3 top-2.5 text-slate-400 hover:text-indigo-600 focus:outline-none"
+                aria-label="Open measurement date picker"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-5 h-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address Section -->
+        <div class="space-y-3 pt-2">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Current Address -->
+            <div>
+              <label
+                for="currentAddress"
+                class="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Current Address
+              </label>
+              <textarea
+                id="currentAddress"
+                formControlName="currentAddress"
+                rows="3"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+                placeholder="Enter current address"
+              ></textarea>
+            </div>
+
+            <!-- Permanent Address -->
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label
+                  for="permanentAddress"
+                  class="block text-sm font-medium text-slate-700"
+                >
+                  Permanent Address
+                </label>
+                <label
+                  class="inline-flex items-center gap-1.5 text-xs text-indigo-600 font-medium cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    formControlName="sameAsCurrentAddress"
+                    class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                  />
+                  Same as Current Address
+                </label>
+              </div>
+              <textarea
+                id="permanentAddress"
+                formControlName="permanentAddress"
+                rows="3"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed"
+                placeholder="Enter permanent address"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: Guardian & Family Information -->
+      <div class="space-y-4">
+        <h3
+          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
+        >
+          <span
+            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
+            >04</span
+          >
+          Guardian & Family Information
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Father Details -->
+          <div>
+            <label
+              for="fatherName"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Father's Name
+            </label>
+            <input
+              id="fatherName"
+              type="text"
+              formControlName="fatherName"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="fatherPhone"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Father's Phone
+            </label>
+            <input
+              id="fatherPhone"
+              type="text"
+              formControlName="fatherPhone"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="fatherOcc"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Father's Occupation
+            </label>
+            <input
+              id="fatherOcc"
+              type="text"
+              formControlName="fatherOcc"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          <!-- Mother Details -->
+          <div>
+            <label
+              for="motherName"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Mother's Name
+            </label>
+            <input
+              id="motherName"
+              type="text"
+              formControlName="motherName"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="motherPhone"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Mother's Phone
+            </label>
+            <input
+              id="motherPhone"
+              type="text"
+              formControlName="motherPhone"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="motherOcc"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Mother's Occupation
+            </label>
+            <input
+              id="motherOcc"
+              type="text"
+              formControlName="motherOcc"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Primary Guardian Info -->
+        <div
+          class="bg-slate-50 p-4 rounded-lg border border-slate-200 mt-4 space-y-4"
+        >
+          <p class="text-sm font-bold text-slate-700">
+            Primary Guardian Information
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label
+                for="guardianIs"
+                class="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Guardian Is
+              </label>
+              <input
+                id="guardianIs"
+                type="text"
+                formControlName="guardianIs"
+                placeholder="e.g. Father, Mother, Other"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+            </div>
+            <div>
+              <label
+                for="guardianName"
+                class="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Guardian Name
+              </label>
+              <input
+                id="guardianName"
+                type="text"
+                formControlName="guardianName"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+            </div>
+            <div>
+              <label
+                for="guardianRelation"
+                class="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Guardian Relation
+              </label>
+              <input
+                id="guardianRelation"
+                type="text"
+                formControlName="guardianRelation"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+            </div>
+            <div>
+              <label
+                for="guardianEmail"
+                class="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Guardian Email
+              </label>
+              <input
+                id="guardianEmail"
+                type="email"
+                formControlName="guardianEmail"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+            </div>
+            <div>
+              <label
+                for="guardianPhone"
+                class="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Guardian Phone
+              </label>
+              <input
+                id="guardianPhone"
+                type="text"
+                formControlName="guardianPhone"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+            </div>
+            <div>
+              <label
+                for="guardianOcc"
+                class="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Guardian Occupation
+              </label>
+              <input
+                id="guardianOcc"
+                type="text"
+                formControlName="guardianOcc"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: Banking & Identification -->
+      <div class="space-y-4">
+        <h3
+          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
+        >
+          <span
+            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
+            >05</span
+          >
+          Bank & Government Identification
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label
+              for="bankName"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Bank Name
+            </label>
+            <input
+              id="bankName"
+              type="text"
+              formControlName="bankName"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="bankAccountNo"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Bank Account No
+            </label>
+            <input
+              id="bankAccountNo"
+              type="text"
+              formControlName="bankAccountNo"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="ifscCode"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              IFSC Code
+            </label>
+            <input
+              id="ifscCode"
+              type="text"
+              formControlName="ifscCode"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="nationalIdentificationNo"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              National ID No
+            </label>
+            <input
+              id="nationalIdentificationNo"
+              type="text"
+              formControlName="nationalIdentificationNo"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="localIdentificationNo"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              Local ID No
+            </label>
+            <input
+              id="localIdentificationNo"
+              type="text"
+              formControlName="localIdentificationNo"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+          <div>
+            <label
+              for="rte"
+              class="block text-sm font-medium text-slate-700 mb-1"
+            >
+              RTE
+            </label>
+            <input
+              id="rte"
+              type="text"
+              formControlName="rte"
+              placeholder="Yes / No"
+              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 6: Notes -->
+      <div>
+        <label for="note" class="block text-sm font-medium text-slate-700 mb-1">
+          Additional Notes
+        </label>
+        <textarea
+          id="note"
+          formControlName="note"
+          rows="3"
+          class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-3 border-t pt-4">
+        <button
+          type="button"
+          (click)="onReset()"
+          class="px-5 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-100 transition font-medium"
+        >
+          Reset Form
+        </button>
+        <button
+          type="submit"
+          class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition font-medium shadow"
+        >
+          Save Student
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

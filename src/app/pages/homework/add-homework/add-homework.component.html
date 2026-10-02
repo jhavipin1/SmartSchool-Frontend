@@ -1,1 +1,398 @@
-<p>add-homework works!</p>
+<div
+  class="p-6 bg-slate-100 min-h-screen text-xs text-slate-700 font-sans space-y-6"
+>
+  <!-- FORM CONTAINER -->
+  <div
+    class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs space-y-6"
+  >
+    <div class="border-b border-slate-100 pb-4">
+      <h2 class="text-base font-bold text-slate-800">Add New Homework</h2>
+      <p class="text-slate-500 text-[11px] mt-0.5">
+        Assign homework and upload resource documents for students.
+      </p>
+    </div>
+
+    <form
+      [formGroup]="addHomeworkForm"
+      (ngSubmit)="onSubmit()"
+      class="space-y-6"
+    >
+      <!-- Row 1: Dropdowns -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="space-y-1.5">
+          <label class="block font-medium text-slate-700"
+            >Class <span class="text-red-500">*</span></label
+          >
+          <select
+            formControlName="selectedClass"
+            class="w-full h-10 px-3 border border-slate-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-800 text-xs"
+          >
+            <option value="">Select Class</option>
+            <option *ngFor="let cls of classes" [value]="cls">{{ cls }}</option>
+          </select>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block font-medium text-slate-700"
+            >Section <span class="text-red-500">*</span></label
+          >
+          <select
+            formControlName="selectedSection"
+            class="w-full h-10 px-3 border border-slate-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-800 text-xs"
+          >
+            <option value="">Select Section</option>
+            <option *ngFor="let sec of sections" [value]="sec">
+              {{ sec }}
+            </option>
+          </select>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block font-medium text-slate-700"
+            >Subject <span class="text-red-500">*</span></label
+          >
+          <select
+            formControlName="selectedSubject"
+            class="w-full h-10 px-3 border border-slate-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-800 text-xs"
+          >
+            <option value="">Select Subject</option>
+            <option *ngFor="let sub of subjects" [value]="sub">
+              {{ sub }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Row 2: Date Controls with Calendar Picker Popover -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- HOMEWORK DATE WITH CALENDAR CONTROL -->
+        <div class="space-y-1.5 relative">
+          <label class="block font-medium text-slate-700"
+            >Homework Date <span class="text-red-500">*</span></label
+          >
+          <div class="relative">
+            <input
+              type="text"
+              readonly
+              formControlName="homeworkDate"
+              (click)="toggleCalendar('homework')"
+              placeholder="yyyy-mm-dd"
+              class="w-full h-10 px-3 pr-10 border border-slate-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-800 text-xs cursor-pointer"
+            />
+            <button
+              type="button"
+              (click)="toggleCalendar('homework')"
+              class="absolute right-2.5 top-2.5 text-slate-400 hover:text-indigo-600 transition cursor-pointer"
+            >
+              <!-- Calendar Icon -->
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Calendar Popover Widget -->
+          <div
+            *ngIf="showHomeworkDatePicker"
+            class="absolute z-50 mt-1 left-0 bg-white border border-slate-200 rounded-lg shadow-xl p-3 w-64 space-y-3"
+          >
+            <div
+              class="flex justify-between items-center text-slate-700 font-semibold px-1"
+            >
+              <button
+                type="button"
+                (click)="changeMonth('homework', -1)"
+                class="p-1 hover:bg-slate-100 rounded"
+              >
+                &lt;
+              </button>
+              <span>{{ currentMonthHomework | date: "MMMM yyyy" }}</span>
+              <button
+                type="button"
+                (click)="changeMonth('homework', 1)"
+                class="p-1 hover:bg-slate-100 rounded"
+              >
+                &gt;
+              </button>
+            </div>
+
+            <div
+              class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-400"
+            >
+              <span *ngFor="let day of daysOfWeek">{{ day }}</span>
+            </div>
+
+            <div class="grid grid-cols-7 text-center gap-1">
+              <button
+                type="button"
+                *ngFor="let dayObj of homeworkDateList"
+                (click)="selectDate('homework', dayObj.fullDate)"
+                [class.text-slate-300]="!dayObj.isCurrentMonth"
+                [class.bg-indigo-600]="
+                  addHomeworkForm.get('homeworkDate')?.value === dayObj.fullDate
+                "
+                [class.text-white]="
+                  addHomeworkForm.get('homeworkDate')?.value === dayObj.fullDate
+                "
+                class="h-7 w-7 text-xs rounded hover:bg-indigo-50 hover:text-indigo-600 flex items-center justify-center transition cursor-pointer"
+              >
+                {{ dayObj.day }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBMISSION DATE WITH CALENDAR CONTROL -->
+        <div class="space-y-1.5 relative">
+          <label class="block font-medium text-slate-700"
+            >Submission Date <span class="text-red-500">*</span></label
+          >
+          <div class="relative">
+            <input
+              type="text"
+              readonly
+              formControlName="submissionDate"
+              (click)="toggleCalendar('submission')"
+              placeholder="yyyy-mm-dd"
+              class="w-full h-10 px-3 pr-10 border rounded-md outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-800 text-xs cursor-pointer"
+              [class.border-red-400]="
+                addHomeworkForm.get('submissionDate')?.touched &&
+                addHomeworkForm.get('submissionDate')?.invalid
+              "
+              [class.border-slate-300]="
+                !(
+                  addHomeworkForm.get('submissionDate')?.touched &&
+                  addHomeworkForm.get('submissionDate')?.invalid
+                )
+              "
+            />
+            <button
+              type="button"
+              (click)="toggleCalendar('submission')"
+              class="absolute right-2.5 top-2.5 text-slate-400 hover:text-indigo-600 transition cursor-pointer"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Calendar Popover Widget -->
+          <div
+            *ngIf="showSubmissionDatePicker"
+            class="absolute z-50 mt-1 left-0 bg-white border border-slate-200 rounded-lg shadow-xl p-3 w-64 space-y-3"
+          >
+            <div
+              class="flex justify-between items-center text-slate-700 font-semibold px-1"
+            >
+              <button
+                type="button"
+                (click)="changeMonth('submission', -1)"
+                class="p-1 hover:bg-slate-100 rounded"
+              >
+                &lt;
+              </button>
+              <span>{{ currentMonthSubmission | date: "MMMM yyyy" }}</span>
+              <button
+                type="button"
+                (click)="changeMonth('submission', 1)"
+                class="p-1 hover:bg-slate-100 rounded"
+              >
+                &gt;
+              </button>
+            </div>
+
+            <div
+              class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-400"
+            >
+              <span *ngFor="let day of daysOfWeek">{{ day }}</span>
+            </div>
+
+            <div class="grid grid-cols-7 text-center gap-1">
+              <button
+                type="button"
+                *ngFor="let dayObj of submissionDateList"
+                (click)="selectDate('submission', dayObj.fullDate)"
+                [class.text-slate-300]="!dayObj.isCurrentMonth"
+                [class.bg-indigo-600]="
+                  addHomeworkForm.get('submissionDate')?.value ===
+                  dayObj.fullDate
+                "
+                [class.text-white]="
+                  addHomeworkForm.get('submissionDate')?.value ===
+                  dayObj.fullDate
+                "
+                class="h-7 w-7 text-xs rounded hover:bg-indigo-50 hover:text-indigo-600 flex items-center justify-center transition cursor-pointer"
+              >
+                {{ dayObj.day }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Max Marks -->
+        <div class="space-y-1.5">
+          <label class="block font-medium text-slate-700">Max Marks</label>
+          <input
+            type="number"
+            formControlName="maxMarks"
+            placeholder="e.g., 100"
+            class="w-full h-10 px-3 border border-slate-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-800 text-xs"
+          />
+        </div>
+      </div>
+
+      <!-- Description / File Upload / Actions -->
+      <div class="space-y-1.5">
+        <label class="block font-medium text-slate-700"
+          >Description / Instructions</label
+        >
+        <textarea
+          formControlName="description"
+          rows="4"
+          placeholder="Enter details about the assignment..."
+          class="w-full p-3 border border-slate-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white text-slate-800 text-xs resize-y"
+        ></textarea>
+      </div>
+
+      <div class="space-y-1.5">
+        <label class="block font-medium text-slate-700">Attach Document</label>
+        <div
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          class="border-2 border-dashed border-slate-200 rounded-lg p-8 text-center bg-slate-50/40 hover:bg-slate-50 transition relative flex flex-col items-center justify-center space-y-2 cursor-pointer"
+        >
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            class="absolute inset-0 opacity-0 cursor-pointer"
+          />
+          <div
+            class="p-3 bg-white rounded-lg border border-slate-200 shadow-2xs"
+          >
+            <svg
+              class="w-6 h-6 text-slate-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <p *ngIf="!selectedFile" class="text-xs font-medium text-slate-700">
+            <span class="text-indigo-600 font-semibold">Upload a file</span> or
+            drag and drop
+          </p>
+          <p *ngIf="selectedFile" class="text-xs font-semibold text-indigo-700">
+            {{ selectedFile.name }}
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2.5">
+        <input
+          type="checkbox"
+          id="publishCheck"
+          formControlName="isPublished"
+          class="w-4 h-4 rounded border-slate-300 text-indigo-600"
+        />
+        <label
+          for="publishCheck"
+          class="text-xs font-medium text-slate-700 cursor-pointer"
+          >Publish immediately (Active)</label
+        >
+      </div>
+
+      <div class="flex justify-end space-x-3 pt-4 border-t border-slate-100">
+        <button
+          type="button"
+          (click)="resetForm()"
+          class="px-5 py-2 border border-slate-300 rounded-md text-slate-700 text-xs"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-6 py-2 bg-indigo-600 text-white rounded-md text-xs font-medium"
+        >
+          Save Homework
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- TABLE DISPLAY -->
+  <div
+    class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs space-y-4"
+  >
+    <h3
+      class="text-sm font-semibold text-slate-800 border-b border-slate-100 pb-3"
+    >
+      All Assigned Homework
+    </h3>
+    <table class="w-full text-left border-collapse">
+      <thead
+        class="bg-slate-50 border-b border-slate-200 text-[11px] uppercase text-slate-700"
+      >
+        <tr>
+          <th class="p-3">Class & Section</th>
+          <th class="p-3">Subject</th>
+          <th class="p-3">Homework Date</th>
+          <th class="p-3">Submission Date</th>
+          <th class="p-3">Status</th>
+          <th class="p-3 text-right">Action</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 text-xs">
+        <tr *ngFor="let item of homeworkList">
+          <td class="p-3 font-medium">
+            {{ item.className }} ({{ item.section }})
+          </td>
+          <td class="p-3 font-semibold text-indigo-700">{{ item.subject }}</td>
+          <td class="p-3">{{ item.homeworkDate }}</td>
+          <td class="p-3">{{ item.submissionDate }}</td>
+          <td class="p-3">
+            <span
+              class="px-2 py-0.5 rounded-full border text-[10.5px] bg-emerald-50 text-emerald-700 border-emerald-200"
+              >{{ item.status }}</span
+            >
+          </td>
+          <td class="p-3 text-right">
+            <button
+              (click)="deleteHomework(item.id)"
+              class="text-red-500 hover:text-red-700"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

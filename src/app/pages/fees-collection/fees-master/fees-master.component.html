@@ -1,1 +1,532 @@
-<p>fees-master works!</p>
+<div
+  class="p-6 bg-slate-100 min-h-screen space-y-4 text-xs font-sans text-slate-700"
+>
+  <!-- TOP TAB NAVIGATION HEADER -->
+  <div
+    class="bg-white rounded border border-slate-200 px-4 py-2 flex space-x-2 shadow-sm"
+  >
+    <button
+      (click)="switchTab('group')"
+      [class.bg-indigo-600]="activeTab === 'group'"
+      [class.text-white]="activeTab === 'group'"
+      [class.text-slate-600]="activeTab !== 'group'"
+      class="px-3 py-1.5 rounded font-medium transition hover:bg-indigo-500 hover:text-white"
+    >
+      Fees Group
+    </button>
+    <button
+      (click)="switchTab('type')"
+      [class.bg-indigo-600]="activeTab === 'type'"
+      [class.text-white]="activeTab === 'type'"
+      [class.text-slate-600]="activeTab !== 'type'"
+      class="px-3 py-1.5 rounded font-medium transition hover:bg-indigo-500 hover:text-white"
+    >
+      Fees Type
+    </button>
+    <button
+      (click)="switchTab('discount')"
+      [class.bg-indigo-600]="activeTab === 'discount'"
+      [class.text-white]="activeTab === 'discount'"
+      [class.text-slate-600]="activeTab !== 'discount'"
+      class="px-3 py-1.5 rounded font-medium transition hover:bg-indigo-500 hover:text-white"
+    >
+      Fees Discount
+    </button>
+    <button
+      (click)="switchTab('master')"
+      [class.bg-indigo-600]="activeTab === 'master'"
+      [class.text-white]="activeTab === 'master'"
+      [class.text-slate-600]="activeTab !== 'master'"
+      class="px-3 py-1.5 rounded font-medium transition hover:bg-indigo-500 hover:text-white"
+    >
+      Fees Master
+    </button>
+  </div>
+
+  <!-- SPLIT SCREEN LAYOUT: FORM (LEFT) + TABLE (RIGHT) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+    <!-- LEFT PANEL: FORM SECTION -->
+    <div
+      class="lg:col-span-4 bg-white rounded border border-slate-200 p-4 shadow-sm flex flex-col justify-between"
+    >
+      <!-- 1. FEE GROUP FORM -->
+      <form
+        *ngIf="activeTab === 'group'"
+        [formGroup]="groupForm"
+        (ngSubmit)="saveGroup()"
+        class="space-y-4"
+      >
+        <h3 class="text-sm font-semibold text-slate-800 border-b pb-2">
+          Add Fees Group
+        </h3>
+        <div>
+          <label class="block font-medium mb-1"
+            >Name <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="name"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+          <span
+            *ngIf="
+              groupForm.get('name')?.invalid && groupForm.get('name')?.touched
+            "
+            class="text-red-500 text-[10px]"
+            >Name is required</span
+          >
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Description</label>
+          <textarea
+            formControlName="description"
+            rows="3"
+            class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          ></textarea>
+        </div>
+        <div class="flex justify-end pt-2 border-t">
+          <button
+            type="submit"
+            [disabled]="isSubmitting"
+            class="bg-indigo-600 text-white px-4 py-1.5 rounded hover:bg-indigo-700 transition"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+
+      <!-- 2. FEE TYPE FORM -->
+      <form
+        *ngIf="activeTab === 'type'"
+        [formGroup]="typeForm"
+        (ngSubmit)="saveType()"
+        class="space-y-4"
+      >
+        <h3 class="text-sm font-semibold text-slate-800 border-b pb-2">
+          Add Fees Type
+        </h3>
+        <div>
+          <label class="block font-medium mb-1"
+            >Fees Group <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="feeGroup"
+            placeholder="e.g. Class 1 General"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1"
+            >Name <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="name"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1"
+            >Fees Code <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="code"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Description</label>
+          <textarea
+            formControlName="description"
+            rows="2"
+            class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          ></textarea>
+        </div>
+        <div class="flex justify-end pt-2 border-t">
+          <button
+            type="submit"
+            [disabled]="isSubmitting"
+            class="bg-indigo-600 text-white px-4 py-1.5 rounded hover:bg-indigo-700 transition"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+
+      <!-- 3. FEE DISCOUNT FORM -->
+      <form
+        *ngIf="activeTab === 'discount'"
+        [formGroup]="discountForm"
+        (ngSubmit)="saveDiscount()"
+        class="space-y-3"
+      >
+        <h3 class="text-sm font-semibold text-slate-800 border-b pb-2">
+          Add Fees Discount
+        </h3>
+        <div>
+          <label class="block font-medium mb-1"
+            >Name <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="name"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1"
+            >Discount Code <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="discountCode"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Discount Type</label>
+          <div class="flex items-center space-x-4 py-1">
+            <label class="flex items-center space-x-1 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="discountType"
+                [value]="DiscountType.PERCENTAGE"
+              />
+              <span>Percentage</span>
+            </label>
+            <label class="flex items-center space-x-1 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="discountType"
+                [value]="DiscountType.FIX_AMOUNT"
+              />
+              <span>Fix Amount</span>
+            </label>
+          </div>
+        </div>
+        <div
+          *ngIf="
+            discountForm.get('discountType')?.value === DiscountType.PERCENTAGE
+          "
+        >
+          <label class="block font-medium mb-1"
+            >Percentage (%) <span class="text-red-500">*</span></label
+          >
+          <input
+            type="number"
+            formControlName="percentage"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div
+          *ngIf="
+            discountForm.get('discountType')?.value === DiscountType.FIX_AMOUNT
+          "
+        >
+          <label class="block font-medium mb-1"
+            >Amount ($) <span class="text-red-500">*</span></label
+          >
+          <input
+            type="number"
+            formControlName="amount"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1"
+            >Number Of Use Count <span class="text-red-500">*</span></label
+          >
+          <input
+            type="number"
+            formControlName="numberOfUseCount"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Expiry Date</label>
+          <input
+            type="date"
+            formControlName="expiryDate"
+            class="w-full h-8 px-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Description</label>
+          <textarea
+            formControlName="description"
+            rows="2"
+            class="w-full p-2 border rounded focus:ring-1 focus:ring-indigo-500 outline-none"
+          ></textarea>
+        </div>
+        <div class="flex justify-end pt-2 border-t">
+          <button
+            type="submit"
+            [disabled]="isSubmitting"
+            class="bg-indigo-600 text-white px-4 py-1.5 rounded hover:bg-indigo-700 transition"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+
+      <!-- 4. FEE MASTER FORM -->
+      <form
+        *ngIf="activeTab === 'master'"
+        [formGroup]="masterForm"
+        (ngSubmit)="saveMaster()"
+        class="space-y-3"
+      >
+        <h3 class="text-sm font-semibold text-slate-800 border-b pb-2">
+          Add Fees Master
+        </h3>
+        <div>
+          <label class="block font-medium mb-1"
+            >Fees Group <span class="text-red-500">*</span></label
+          >
+          <select
+            formControlName="feeGroupId"
+            class="w-full h-8 px-2 border rounded bg-white outline-none"
+          >
+            <option [value]="null">Select Group</option>
+            <option *ngFor="let g of feeGroups" [value]="g.id">
+              {{ g.name }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium mb-1"
+            >Fees Type <span class="text-red-500">*</span></label
+          >
+          <select
+            formControlName="feeTypeId"
+            class="w-full h-8 px-2 border rounded bg-white outline-none"
+          >
+            <option [value]="null">Select Type</option>
+            <option *ngFor="let t of feeTypes" [value]="t.id">
+              {{ t.name }} ({{ t.code }})
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium mb-1"
+            >Due Date <span class="text-red-500">*</span></label
+          >
+          <input
+            type="date"
+            formControlName="dueDate"
+            class="w-full h-8 px-2 border rounded outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1"
+            >Amount ($) <span class="text-red-500">*</span></label
+          >
+          <input
+            type="number"
+            formControlName="amount"
+            class="w-full h-8 px-2 border rounded outline-none"
+          />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Fine Type</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center space-x-1"
+              ><input
+                type="radio"
+                formControlName="fineType"
+                [value]="FineType.NONE"
+              /><span>None</span></label
+            >
+            <label class="flex items-center space-x-1"
+              ><input
+                type="radio"
+                formControlName="fineType"
+                [value]="FineType.PERCENTAGE"
+              /><span>Percentage</span></label
+            >
+            <label class="flex items-center space-x-1"
+              ><input
+                type="radio"
+                formControlName="fineType"
+                [value]="FineType.FIX_AMOUNT"
+              /><span>Fix Amount</span></label
+            >
+            <label class="flex items-center space-x-1"
+              ><input
+                type="radio"
+                formControlName="fineType"
+                [value]="FineType.CUMULATIVE"
+              /><span>Cumulative</span></label
+            >
+          </div>
+        </div>
+        <div class="flex justify-end pt-2 border-t">
+          <button
+            type="submit"
+            [disabled]="isSubmitting"
+            class="bg-indigo-600 text-white px-4 py-1.5 rounded hover:bg-indigo-700 transition"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- RIGHT PANEL: LIST DISPLAY TABLES -->
+    <div
+      class="lg:col-span-8 bg-white rounded border border-slate-200 p-4 shadow-sm flex flex-col"
+    >
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-semibold text-slate-800">
+          {{
+            activeTab === "group"
+              ? "Fees Group List"
+              : activeTab === "type"
+                ? "Fees Type List"
+                : activeTab === "discount"
+                  ? "Fees Discount List"
+                  : "Fees Master List"
+          }}
+        </h3>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          placeholder="Search..."
+          class="h-8 px-2 border rounded text-xs w-48 outline-none focus:ring-1 focus:ring-indigo-500"
+        />
+      </div>
+
+      <div class="overflow-x-auto border rounded">
+        <!-- TABLE 1: GROUPS -->
+        <table
+          *ngIf="activeTab === 'group'"
+          class="w-full text-left border-collapse"
+        >
+          <thead class="bg-slate-100 border-b">
+            <tr>
+              <th class="p-2">Name</th>
+              <th class="p-2">Description</th>
+              <th class="p-2 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr *ngFor="let g of feeGroups" class="hover:bg-slate-50">
+              <td class="p-2 font-medium">{{ g.name }}</td>
+              <td class="p-2 text-slate-500">{{ g.description || "-" }}</td>
+              <td class="p-2 text-right">
+                <button
+                  (click)="deleteItem(g.id)"
+                  class="bg-red-500 text-white px-2 py-0.5 rounded hover:bg-red-600"
+                >
+                  ×
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- TABLE 2: TYPES -->
+        <table
+          *ngIf="activeTab === 'type'"
+          class="w-full text-left border-collapse"
+        >
+          <thead class="bg-slate-100 border-b">
+            <tr>
+              <th class="p-2">Name</th>
+              <th class="p-2">Fees Code</th>
+              <th class="p-2">Fees Group</th>
+              <th class="p-2 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr *ngFor="let t of feeTypes" class="hover:bg-slate-50">
+              <td class="p-2 font-medium">{{ t.name }}</td>
+              <td class="p-2 font-mono text-slate-600">{{ t.code }}</td>
+              <td class="p-2 text-slate-500">{{ t.feeGroup }}</td>
+              <td class="p-2 text-right">
+                <button
+                  (click)="deleteItem(t.id)"
+                  class="bg-red-500 text-white px-2 py-0.5 rounded hover:bg-red-600"
+                >
+                  ×
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- TABLE 3: DISCOUNTS -->
+        <table
+          *ngIf="activeTab === 'discount'"
+          class="w-full text-left border-collapse"
+        >
+          <thead class="bg-slate-100 border-b">
+            <tr>
+              <th class="p-2">Name</th>
+              <th class="p-2">Code</th>
+              <th class="p-2">Percentage</th>
+              <th class="p-2">Amount ($)</th>
+              <th class="p-2">Use Count</th>
+              <th class="p-2 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr *ngFor="let d of feeDiscounts" class="hover:bg-slate-50">
+              <td class="p-2 font-medium">{{ d.name }}</td>
+              <td class="p-2 font-mono text-slate-600">{{ d.discountCode }}</td>
+              <td class="p-2">{{ d.percentage ? d.percentage + "%" : "-" }}</td>
+              <td class="p-2">{{ d.amount ? "$" + d.amount : "-" }}</td>
+              <td class="p-2">{{ d.numberOfUseCount }}</td>
+              <td class="p-2 text-right">
+                <button
+                  (click)="deleteItem(d.id)"
+                  class="bg-red-500 text-white px-2 py-0.5 rounded hover:bg-red-600"
+                >
+                  ×
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- TABLE 4: MASTER -->
+        <table
+          *ngIf="activeTab === 'master'"
+          class="w-full text-left border-collapse"
+        >
+          <thead class="bg-slate-100 border-b">
+            <tr>
+              <th class="p-2">Fee Type ID</th>
+              <th class="p-2">Amount</th>
+              <th class="p-2">Fine Type</th>
+              <th class="p-2">Due Date</th>
+              <th class="p-2 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr *ngFor="let m of feeMasters" class="hover:bg-slate-50">
+              <td class="p-2 font-medium">Type #{{ m.feeTypeId }}</td>
+              <td class="p-2">${{ m.amount }}</td>
+              <td class="p-2">
+                <span class="px-1.5 py-0.5 bg-slate-100 rounded border">{{
+                  m.fineType || "NONE"
+                }}</span>
+              </td>
+              <td class="p-2">{{ m.dueDate }}</td>
+              <td class="p-2 text-right">
+                <button
+                  (click)="deleteItem(m.id)"
+                  class="bg-red-500 text-white px-2 py-0.5 rounded hover:bg-red-600"
+                >
+                  ×
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

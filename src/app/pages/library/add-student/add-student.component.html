@@ -1,1 +1,438 @@
-<p>add-student works!</p>
+<div class="p-6 bg-slate-50 min-h-screen space-y-6">
+  <!-- SELECT CRITERIA CARD -->
+  <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+    <h3 class="text-base font-semibold text-slate-700 mb-4">Select Criteria</h3>
+
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Class Selector -->
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">
+            Class <span class="text-red-500">*</span>
+          </label>
+          <select
+            formControlName="classId"
+            class="w-full h-10 px-3 bg-white border border-slate-300 rounded-md text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition"
+          >
+            <option value="" disabled>Select Class</option>
+            <option *ngFor="let cls of classes" [value]="cls.id">
+              {{ cls.name }}
+            </option>
+          </select>
+          <span
+            *ngIf="
+              searchForm.get('classId')?.invalid &&
+              searchForm.get('classId')?.touched
+            "
+            class="text-xs text-red-500 mt-1 block"
+          >
+            Class is required
+          </span>
+        </div>
+
+        <!-- Section Selector -->
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1"
+            >Section</label
+          >
+          <select
+            formControlName="sectionId"
+            class="w-full h-10 px-3 bg-white border border-slate-300 rounded-md text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition"
+          >
+            <option value="">Select Section</option>
+            <option *ngFor="let sec of sections" [value]="sec.id">
+              {{ sec.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Search Button -->
+      <div class="mt-4 flex justify-end">
+        <button
+          type="submit"
+          [disabled]="isLoading"
+          class="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2 rounded-md shadow-sm transition disabled:opacity-50"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <span>{{ isLoading ? "Searching..." : "Search" }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- STUDENT MEMBERS LIST CARD -->
+  <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+    <h3 class="text-base font-semibold text-slate-700 mb-4">
+      Student Members List
+    </h3>
+
+    <!-- Toolbar: Quick Filter & Page Size & Export Icons -->
+    <div
+      class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4"
+    >
+      <!-- Quick Search input -->
+      <div class="w-full md:w-64">
+        <input
+          type="text"
+          placeholder="Search..."
+          (input)="onTableSearch($any($event.target).value)"
+          class="w-full h-9 px-3 border border-slate-300 rounded-md text-sm text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+        />
+      </div>
+
+      <!-- Export Actions & Page Selector -->
+      <div class="flex items-center space-x-4 w-full md:w-auto justify-end">
+        <select
+          class="h-9 px-2 border border-slate-300 rounded-md text-sm text-slate-700 focus:outline-none"
+        >
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+        </select>
+
+        <!-- Utility Icons (Copy, CSV, Excel, PDF, Print, Column Visibility) -->
+        <div
+          class="flex items-center space-x-2 text-slate-500 border-l border-slate-200 pl-3"
+        >
+          <button
+            title="Copy"
+            class="p-1.5 hover:bg-slate-100 rounded transition text-slate-600"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
+          </button>
+          <button
+            title="Excel"
+            class="p-1.5 hover:bg-slate-100 rounded transition text-slate-600"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </button>
+          <button
+            title="PDF"
+            class="p-1.5 hover:bg-slate-100 rounded transition text-slate-600"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              />
+            </svg>
+          </button>
+          <button
+            title="Print"
+            class="p-1.5 hover:bg-slate-100 rounded transition text-slate-600"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="overflow-x-auto border border-slate-200 rounded-lg">
+      <table class="w-full text-left text-xs text-slate-700">
+        <thead
+          class="bg-slate-100 border-b border-slate-200 uppercase font-semibold text-slate-600"
+        >
+          <tr>
+            <th class="py-3 px-4">Member ID</th>
+            <th class="py-3 px-4">Library Card No.</th>
+            <th class="py-3 px-4">Admission No</th>
+            <th class="py-3 px-4">Student Name</th>
+            <th class="py-3 px-4">Class</th>
+            <th class="py-3 px-4">Father Name</th>
+            <th class="py-3 px-4">Date Of Birth</th>
+            <th class="py-3 px-4">Gender</th>
+            <th class="py-3 px-4">Mobile Number</th>
+            <th class="py-3 px-4 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr
+            *ngFor="let student of filteredStudents"
+            class="hover:bg-emerald-50/50 bg-emerald-50/30 transition"
+          >
+            <td class="py-3 px-4 font-medium text-slate-800">
+              {{ student.memberId || student.id }}
+            </td>
+            <td class="py-3 px-4 font-semibold text-indigo-700">
+              {{ student.libraryCardNo || "-" }}
+            </td>
+            <td class="py-3 px-4">{{ student.admissionNo }}</td>
+            <td class="py-3 px-4 font-medium text-slate-900">
+              {{ student.studentName }}
+            </td>
+            <td class="py-3 px-4">{{ student.className }}</td>
+            <td class="py-3 px-4">{{ student.fatherName || "-" }}</td>
+            <td class="py-3 px-4">{{ student.dateOfBirth || "-" }}</td>
+            <td class="py-3 px-4">{{ student.gender || "-" }}</td>
+            <td class="py-3 px-4">{{ student.mobileNumber || "-" }}</td>
+            <td class="py-3 px-4 text-center">
+              <div class="flex items-center justify-center space-x-2">
+                <!-- Assign / Update Library Card Button -->
+                <button
+                  (click)="openAssignModal(student)"
+                  title="Add/Edit Library Card"
+                  class="p-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded transition"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                </button>
+
+                <!-- Audit Log Button -->
+                <button
+                  (click)="openAuditLogs(student)"
+                  title="View Card Audit Logs"
+                  class="p-1.5 bg-slate-600 hover:bg-slate-700 text-white rounded transition"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="filteredStudents.length === 0 && !isLoading">
+            <td colspan="10" class="py-8 text-center text-slate-400">
+              No student records found matching your criteria.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL: ASSIGN / UPDATE LIBRARY CARD -->
+  <div
+    *ngIf="showAssignModal"
+    class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+  >
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+      <div
+        class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex justify-between items-center"
+      >
+        <h4 class="font-semibold text-slate-800 text-sm">
+          Assign Library Card
+        </h4>
+        <button
+          (click)="closeAssignModal()"
+          class="text-slate-400 hover:text-slate-600"
+        >
+          &times;
+        </button>
+      </div>
+
+      <form
+        [formGroup]="assignCardForm"
+        (ngSubmit)="submitLibraryCard()"
+        class="p-5 space-y-4"
+      >
+        <div>
+          <p class="text-xs text-slate-500 mb-1">
+            Student:
+            <strong class="text-slate-800">{{
+              selectedStudent?.studentName
+            }}</strong>
+          </p>
+          <p class="text-xs text-slate-500 mb-3">
+            Admission No:
+            <strong class="text-slate-800">{{
+              selectedStudent?.admissionNo
+            }}</strong>
+          </p>
+
+          <label class="block text-xs font-medium text-slate-700 mb-1">
+            Library Card Number <span class="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            formControlName="libraryCardNo"
+            placeholder="e.g. 4532"
+            class="w-full h-10 px-3 border border-slate-300 rounded-md text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          />
+          <span
+            *ngIf="
+              assignCardForm.get('libraryCardNo')?.invalid &&
+              assignCardForm.get('libraryCardNo')?.touched
+            "
+            class="text-xs text-red-500 mt-1 block"
+          >
+            Valid Library Card Number is required
+          </span>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+          <button
+            type="button"
+            (click)="closeAssignModal()"
+            class="px-4 py-2 border border-slate-300 text-slate-700 text-xs font-medium rounded-md hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-md shadow-sm"
+          >
+            Save Card
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: AUDIT LOGS -->
+  <div
+    *ngIf="showAuditModal"
+    class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+  >
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-lg overflow-hidden">
+      <div
+        class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex justify-between items-center"
+      >
+        <h4 class="font-semibold text-slate-800 text-sm">
+          Library Card History Log
+        </h4>
+        <button
+          (click)="closeAuditModal()"
+          class="text-slate-400 hover:text-slate-600"
+        >
+          &times;
+        </button>
+      </div>
+
+      <div class="p-5">
+        <p class="text-xs text-slate-500 mb-4">
+          Audit history for
+          <strong class="text-slate-800">{{
+            selectedStudent?.studentName
+          }}</strong>
+        </p>
+
+        <div
+          class="max-h-60 overflow-y-auto border border-slate-200 rounded-md"
+        >
+          <table class="w-full text-left text-xs">
+            <thead
+              class="bg-slate-50 border-b border-slate-200 font-semibold text-slate-600"
+            >
+              <tr>
+                <th class="p-2">Old Card</th>
+                <th class="p-2">New Card</th>
+                <th class="p-2">Updated By</th>
+                <th class="p-2">Date</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr *ngFor="let log of auditLogs">
+                <td class="p-2 text-slate-500">
+                  {{ log.oldLibraryCardNo || "-" }}
+                </td>
+                <td class="p-2 font-medium text-indigo-600">
+                  {{ log.newLibraryCardNo || "-" }}
+                </td>
+                <td class="p-2 text-slate-600">
+                  {{ log.updatedBy || "System" }}
+                </td>
+                <td class="p-2 text-slate-500">{{ log.updatedAt || "-" }}</td>
+              </tr>
+              <tr *ngIf="auditLogs.length === 0">
+                <td colspan="4" class="p-4 text-center text-slate-400">
+                  No audit records found.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex justify-end mt-4">
+          <button
+            type="button"
+            (click)="closeAuditModal()"
+            class="px-4 py-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-md hover:bg-slate-300"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
