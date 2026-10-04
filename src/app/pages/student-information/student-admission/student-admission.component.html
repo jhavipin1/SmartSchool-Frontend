@@ -1,914 +1,908 @@
-<div class="max-w-6xl mx-auto p-6 bg-slate-50 min-h-screen">
+<div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
   <div
-    class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-200"
+    class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden"
   >
     <!-- Header -->
-    <div class="bg-indigo-600 px-6 py-4 flex items-center justify-between">
-      <h2 class="text-xl font-bold text-white">Student Registration Form</h2>
-      <span
-        class="text-xs font-semibold bg-indigo-500 text-white px-3 py-1 rounded-full uppercase tracking-wider"
-      >
-        SmartSchool ERP
-      </span>
+    <div class="bg-indigo-600 px-6 py-4 text-white">
+      <h2 class="text-xl font-bold tracking-wide">Student Registration</h2>
     </div>
 
-    <form
-      [formGroup]="studentForm"
-      (ngSubmit)="onSubmit()"
-      class="p-6 space-y-8"
-    >
-      <!-- SECTION 1: Personal Details -->
-      <div class="space-y-4">
-        <h3
-          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
-        >
-          <span
-            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
-            >01</span
-          >
-          Personal Details
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Admission No -->
-          <div>
-            <label
-              for="admissionNumber"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Admission No <span class="text-red-500">*</span>
-            </label>
-            <input
-              id="admissionNumber"
-              type="text"
-              formControlName="admissionNumber"
-              class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              [ngClass]="
-                isInvalid('admissionNumber')
-                  ? 'border-red-500'
-                  : 'border-slate-300'
-              "
-            />
-            <p
-              *ngIf="isInvalid('admissionNumber')"
-              class="text-xs text-red-500 mt-1"
-            >
-              Admission number is required.
-            </p>
-          </div>
-
-          <!-- Roll Number -->
-          <div>
-            <label
-              for="rollNumber"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Roll Number
-            </label>
-            <input
-              id="rollNumber"
-              type="text"
-              formControlName="rollNumber"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
-          <!-- Date of Birth -->
-          <div>
-            <label
-              for="dateOfBirth"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Date of Birth <span class="text-red-500">*</span>
-            </label>
-            <div class="relative">
-              <input
-                id="dateOfBirth"
-                type="date"
-                #dobPicker
-                formControlName="dateOfBirth"
-                class="w-full px-3 py-2 pr-10 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer"
-                [ngClass]="
-                  isInvalid('dateOfBirth')
-                    ? 'border-red-500'
-                    : 'border-slate-300'
-                "
-              />
-              <button
-                type="button"
-                (click)="dobPicker.showPicker()"
-                class="absolute right-3 top-2.5 text-slate-400 hover:text-indigo-600 focus:outline-none"
-                aria-label="Open date picker"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-5 h-5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                  />
-                </svg>
-              </button>
-            </div>
-            <p
-              *ngIf="isInvalid('dateOfBirth')"
-              class="text-xs text-red-500 mt-1"
-            >
-              Date of birth is required.
-            </p>
-          </div>
-
-          <!-- First Name -->
-          <div>
-            <label
-              for="firstName"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              First Name <span class="text-red-500">*</span>
-            </label>
-            <input
-              id="firstName"
-              type="text"
-              formControlName="firstName"
-              class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              [ngClass]="
-                isInvalid('firstName') ? 'border-red-500' : 'border-slate-300'
-              "
-            />
-            <p *ngIf="isInvalid('firstName')" class="text-xs text-red-500 mt-1">
-              First name is required.
-            </p>
-          </div>
-
-          <!-- Middle Name -->
-          <div>
-            <label
-              for="middleName"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Middle Name
-            </label>
-            <input
-              id="middleName"
-              type="text"
-              formControlName="middleName"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
-          <!-- Last Name -->
-          <div>
-            <label
-              for="lastName"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Last Name <span class="text-red-500">*</span>
-            </label>
-            <input
-              id="lastName"
-              type="text"
-              formControlName="lastName"
-              class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              [ngClass]="
-                isInvalid('lastName') ? 'border-red-500' : 'border-slate-300'
-              "
-            />
-            <p *ngIf="isInvalid('lastName')" class="text-xs text-red-500 mt-1">
-              Last name is required.
-            </p>
-          </div>
-
-          <!-- Gender -->
-          <div>
-            <label
-              for="gender"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Gender
-            </label>
-            <select
-              id="gender"
-              formControlName="gender"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option value="">Select Gender</option>
-              <option *ngFor="let opt of genderOptions" [value]="opt">
-                {{ opt }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Category -->
-          <div>
-            <label
-              for="category"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Category
-            </label>
-            <select
-              id="category"
-              formControlName="category"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option value="">Select Category</option>
-              <option *ngFor="let opt of categoryOptions" [value]="opt">
-                {{ opt }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Religion -->
-          <div>
-            <label
-              for="religion"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Religion
-            </label>
-            <select
-              id="religion"
-              formControlName="religion"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option value="">Select Religion</option>
-              <option *ngFor="let opt of religionOptions" [value]="opt">
-                {{ opt }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Blood Group -->
-          <div>
-            <label
-              for="bloodGroup"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Blood Group
-            </label>
-            <select
-              id="bloodGroup"
-              formControlName="bloodGroup"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option value="">Select Blood Group</option>
-              <option *ngFor="let opt of bloodGroupOptions" [value]="opt">
-                {{ opt }}
-              </option>
-            </select>
-          </div>
-
-          <!-- House -->
-          <div>
-            <label
-              for="house"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              House
-            </label>
-            <select
-              id="house"
-              formControlName="house"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option value="">Select House</option>
-              <option *ngFor="let opt of houseOptions" [value]="opt">
-                {{ opt }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION 2: Academic Placement -->
-      <div class="space-y-4">
-        <h3
-          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
-        >
-          <span
-            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
-            >02</span
-          >
-          Academic Placement
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <!-- Class -->
-          <div>
-            <label
-              for="className"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Class
-            </label>
-            <select
-              id="className"
-              formControlName="className"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option [ngValue]="null">Select Class</option>
-              <option *ngFor="let c of classList" [ngValue]="c">
-                {{ c.name }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Section -->
-          <div>
-            <label
-              for="section"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Section
-            </label>
-            <select
-              id="section"
-              formControlName="section"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option [ngValue]="null">Select Section</option>
-              <option *ngFor="let s of sectionList" [ngValue]="s">
-                {{ s.name }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Admission Date -->
-          <div>
-            <label
-              for="admissionDate"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Admission Date
-            </label>
-            <div class="relative">
-              <input
-                id="admissionDate"
-                type="date"
-                #admissionPicker
-                formControlName="admissionDate"
-                class="w-full px-3 py-2 pr-10 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer"
-              />
-              <button
-                type="button"
-                (click)="admissionPicker.showPicker()"
-                class="absolute right-3 top-2.5 text-slate-400 hover:text-indigo-600 focus:outline-none"
-                aria-label="Open admission date picker"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-5 h-5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Previous School -->
-          <div>
-            <label
-              for="previousSchool"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Previous School
-            </label>
-            <input
-              id="previousSchool"
-              type="text"
-              formControlName="previousSchool"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION 3: Contact & Physical Metrics -->
-      <div class="space-y-4">
-        <h3
-          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
-        >
-          <span
-            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
-            >03</span
-          >
-          Contact & Physical Metrics
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Mobile No -->
-          <div>
-            <label
-              for="mobileNo"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Mobile No
-            </label>
-            <input
-              id="mobileNo"
-              type="text"
-              formControlName="mobileNo"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
-          <!-- Email -->
-          <div>
-            <label
-              for="email"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              formControlName="email"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
-          <!-- Library Card No -->
-          <div>
-            <label
-              for="libraryCardNo"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Library Card No
-            </label>
-            <input
-              id="libraryCardNo"
-              type="text"
-              formControlName="libraryCardNo"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
-          <!-- Height -->
-          <div>
-            <label
-              for="height"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Height (cm)
-            </label>
-            <input
-              id="height"
-              type="number"
-              step="0.01"
-              formControlName="height"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
-          <!-- Weight -->
-          <div>
-            <label
-              for="weight"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Weight (kg)
-            </label>
-            <input
-              id="weight"
-              type="number"
-              step="0.01"
-              formControlName="weight"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
-          <!-- Measurement Date -->
-          <div>
-            <label
-              for="measurementDate"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Measurement Date
-            </label>
-            <div class="relative">
-              <input
-                id="measurementDate"
-                type="date"
-                #measurementPicker
-                formControlName="measurementDate"
-                class="w-full px-3 py-2 pr-10 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer"
-              />
-              <button
-                type="button"
-                (click)="measurementPicker.showPicker()"
-                class="absolute right-3 top-2.5 text-slate-400 hover:text-indigo-600 focus:outline-none"
-                aria-label="Open measurement date picker"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-5 h-5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Address Section -->
-        <div class="space-y-3 pt-2">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Current Address -->
-            <div>
-              <label
-                for="currentAddress"
-                class="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Current Address
-              </label>
-              <textarea
-                id="currentAddress"
-                formControlName="currentAddress"
-                rows="3"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
-                placeholder="Enter current address"
-              ></textarea>
-            </div>
-
-            <!-- Permanent Address -->
-            <div>
-              <div class="flex items-center justify-between mb-1">
-                <label
-                  for="permanentAddress"
-                  class="block text-sm font-medium text-slate-700"
-                >
-                  Permanent Address
-                </label>
-                <label
-                  class="inline-flex items-center gap-1.5 text-xs text-indigo-600 font-medium cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    formControlName="sameAsCurrentAddress"
-                    class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
-                  />
-                  Same as Current Address
-                </label>
-              </div>
-              <textarea
-                id="permanentAddress"
-                formControlName="permanentAddress"
-                rows="3"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed"
-                placeholder="Enter permanent address"
-              ></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION 4: Guardian & Family Information -->
-      <div class="space-y-4">
-        <h3
-          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
-        >
-          <span
-            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
-            >04</span
-          >
-          Guardian & Family Information
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Father Details -->
-          <div>
-            <label
-              for="fatherName"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Father's Name
-            </label>
-            <input
-              id="fatherName"
-              type="text"
-              formControlName="fatherName"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="fatherPhone"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Father's Phone
-            </label>
-            <input
-              id="fatherPhone"
-              type="text"
-              formControlName="fatherPhone"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="fatherOcc"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Father's Occupation
-            </label>
-            <input
-              id="fatherOcc"
-              type="text"
-              formControlName="fatherOcc"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
-          <!-- Mother Details -->
-          <div>
-            <label
-              for="motherName"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Mother's Name
-            </label>
-            <input
-              id="motherName"
-              type="text"
-              formControlName="motherName"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="motherPhone"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Mother's Phone
-            </label>
-            <input
-              id="motherPhone"
-              type="text"
-              formControlName="motherPhone"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="motherOcc"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Mother's Occupation
-            </label>
-            <input
-              id="motherOcc"
-              type="text"
-              formControlName="motherOcc"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-        </div>
-
-        <!-- Primary Guardian Info -->
-        <div
-          class="bg-slate-50 p-4 rounded-lg border border-slate-200 mt-4 space-y-4"
-        >
-          <p class="text-sm font-bold text-slate-700">
-            Primary Guardian Information
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label
-                for="guardianIs"
-                class="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Guardian Is
-              </label>
-              <input
-                id="guardianIs"
-                type="text"
-                formControlName="guardianIs"
-                placeholder="e.g. Father, Mother, Other"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-            <div>
-              <label
-                for="guardianName"
-                class="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Guardian Name
-              </label>
-              <input
-                id="guardianName"
-                type="text"
-                formControlName="guardianName"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-            <div>
-              <label
-                for="guardianRelation"
-                class="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Guardian Relation
-              </label>
-              <input
-                id="guardianRelation"
-                type="text"
-                formControlName="guardianRelation"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-            <div>
-              <label
-                for="guardianEmail"
-                class="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Guardian Email
-              </label>
-              <input
-                id="guardianEmail"
-                type="email"
-                formControlName="guardianEmail"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-            <div>
-              <label
-                for="guardianPhone"
-                class="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Guardian Phone
-              </label>
-              <input
-                id="guardianPhone"
-                type="text"
-                formControlName="guardianPhone"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-            <div>
-              <label
-                for="guardianOcc"
-                class="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Guardian Occupation
-              </label>
-              <input
-                id="guardianOcc"
-                type="text"
-                formControlName="guardianOcc"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION 5: Banking & Identification -->
-      <div class="space-y-4">
-        <h3
-          class="text-lg font-semibold text-slate-800 border-b pb-2 flex items-center gap-2"
-        >
-          <span
-            class="bg-indigo-100 text-indigo-600 rounded-lg p-1 text-sm font-bold"
-            >05</span
-          >
-          Bank & Government Identification
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label
-              for="bankName"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Bank Name
-            </label>
-            <input
-              id="bankName"
-              type="text"
-              formControlName="bankName"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="bankAccountNo"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Bank Account No
-            </label>
-            <input
-              id="bankAccountNo"
-              type="text"
-              formControlName="bankAccountNo"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="ifscCode"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              IFSC Code
-            </label>
-            <input
-              id="ifscCode"
-              type="text"
-              formControlName="ifscCode"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="nationalIdentificationNo"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              National ID No
-            </label>
-            <input
-              id="nationalIdentificationNo"
-              type="text"
-              formControlName="nationalIdentificationNo"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="localIdentificationNo"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              Local ID No
-            </label>
-            <input
-              id="localIdentificationNo"
-              type="text"
-              formControlName="localIdentificationNo"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-          <div>
-            <label
-              for="rte"
-              class="block text-sm font-medium text-slate-700 mb-1"
-            >
-              RTE
-            </label>
-            <input
-              id="rte"
-              type="text"
-              formControlName="rte"
-              placeholder="Yes / No"
-              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION 6: Notes -->
-      <div>
-        <label for="note" class="block text-sm font-medium text-slate-700 mb-1">
-          Additional Notes
-        </label>
-        <textarea
-          id="note"
-          formControlName="note"
-          rows="3"
-          class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
-        ></textarea>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex justify-end gap-3 border-t pt-4">
+    <div class="p-6">
+      <!-- Success Alert -->
+      <div
+        *ngIf="successMessage"
+        class="mb-6 p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between"
+      >
+        <span class="text-sm font-medium">{{ successMessage }}</span>
         <button
           type="button"
-          (click)="onReset()"
-          class="px-5 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-100 transition font-medium"
+          (click)="clearMessages()"
+          class="text-emerald-600 hover:text-emerald-900 font-bold ml-4 focus:outline-none"
         >
-          Reset Form
-        </button>
-        <button
-          type="submit"
-          class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition font-medium shadow"
-        >
-          Save Student
+          ✕
         </button>
       </div>
-    </form>
+
+      <!-- Error Alert -->
+      <div
+        *ngIf="errorMessage"
+        class="mb-6 p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between"
+      >
+        <span class="text-sm font-medium">{{ errorMessage }}</span>
+        <button
+          type="button"
+          (click)="clearMessages()"
+          class="text-rose-600 hover:text-rose-900 font-bold ml-4 focus:outline-none"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Tab Stepper Header -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-8">
+        <button
+          *ngFor="let step of steps"
+          type="button"
+          (click)="selectTab(step.id)"
+          [ngClass]="
+            activeTab === step.id
+              ? 'bg-indigo-600 text-white shadow-sm font-semibold'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium'
+          "
+          class="px-3 py-2.5 rounded-lg text-xs sm:text-sm text-center transition-colors duration-150 truncate focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          {{ step.id }}. {{ step.title }}
+        </button>
+      </div>
+
+      <!-- Form Body -->
+      <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+        <!-- Tab 1: Personal Details -->
+        <div *ngIf="activeTab === 1" class="space-y-6">
+          <h3
+            class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2"
+          >
+            1. Personal Details
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Admission Number <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                formControlName="admissionNumber"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('admissionNumber'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+              <p
+                *ngIf="isInvalid('admissionNumber')"
+                class="mt-1 text-xs text-rose-500"
+              >
+                Admission number is required (max 50 chars).
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Roll Number</label
+              >
+              <input
+                type="text"
+                formControlName="rollNumber"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                First Name <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                formControlName="firstName"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('firstName'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+              <p
+                *ngIf="isInvalid('firstName')"
+                class="mt-1 text-xs text-rose-500"
+              >
+                First name is required.
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Middle Name</label
+              >
+              <input
+                type="text"
+                formControlName="middleName"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Last Name <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                formControlName="lastName"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('lastName'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+              <p
+                *ngIf="isInvalid('lastName')"
+                class="mt-1 text-xs text-rose-500"
+              >
+                Last name is required.
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Date of Birth <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  #dobInput
+                  type="date"
+                  formControlName="dateOfBirth"
+                  [ngClass]="{
+                    'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                      isInvalid('dateOfBirth'),
+                  }"
+                  class="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm cursor-pointer"
+                />
+                <button
+                  type="button"
+                  (click)="triggerDatePicker(dobInput)"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 focus:outline-none"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <p
+                *ngIf="isInvalid('dateOfBirth')"
+                class="mt-1 text-xs text-rose-500"
+              >
+                Date of birth is required.
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Gender</label
+              >
+              <select
+                formControlName="gender"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white"
+              >
+                <option value="">Select Gender</option>
+                <option *ngFor="let opt of genderOptions" [value]="opt">
+                  {{ opt }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Category</label
+              >
+              <select
+                formControlName="category"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white"
+              >
+                <option value="">Select Category</option>
+                <option *ngFor="let opt of categoryOptions" [value]="opt">
+                  {{ opt }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Religion</label
+              >
+              <select
+                formControlName="religion"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white"
+              >
+                <option value="">Select Religion</option>
+                <option *ngFor="let opt of religionOptions" [value]="opt">
+                  {{ opt }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Blood Group</label
+              >
+              <select
+                formControlName="bloodGroup"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white"
+              >
+                <option value="">Select Blood Group</option>
+                <option *ngFor="let opt of bloodGroupOptions" [value]="opt">
+                  {{ opt }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >House</label
+              >
+              <select
+                formControlName="house"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white"
+              >
+                <option value="">Select House</option>
+                <option *ngFor="let opt of houseOptions" [value]="opt">
+                  {{ opt }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Academic Placement -->
+        <!-- Tab 2: Academic Placement -->
+        <div *ngIf="activeTab === 2" class="space-y-6">
+          <h3
+            class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2"
+          >
+            2. Academic Placement
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Class Selection -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Class <span class="text-rose-500">*</span>
+              </label>
+              <select
+                formControlName="classNameId"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('classNameId'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white"
+              >
+                <option value="" disabled>
+                  {{ isLoadingClasses ? "Loading classes..." : "Select Class" }}
+                </option>
+                <option *ngFor="let cls of classList" [value]="cls.id">
+                  {{ cls.className || cls.name || "Class " + cls.id }}
+                </option>
+              </select>
+              <p
+                *ngIf="isInvalid('classNameId')"
+                class="mt-1 text-xs text-rose-500"
+              >
+                Class selection is required.
+              </p>
+            </div>
+
+            <!-- Section Selection -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Section <span class="text-rose-500">*</span>
+              </label>
+              <select
+                formControlName="sectionId"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('sectionId'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+              >
+                <option value="" disabled>
+                  {{
+                    sectionList.length === 0
+                      ? "Select a class first"
+                      : "Select Section"
+                  }}
+                </option>
+                <option *ngFor="let sec of sectionList" [value]="sec.id">
+                  {{ sec.sectionName || sec.name || "Section " + sec.id }}
+                </option>
+              </select>
+              <p
+                *ngIf="isInvalid('sectionId')"
+                class="mt-1 text-xs text-rose-500"
+              >
+                Section selection is required.
+              </p>
+            </div>
+
+            <!-- Admission Date -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Admission Date
+              </label>
+              <div class="relative">
+                <input
+                  #admDateInput
+                  type="date"
+                  formControlName="admissionDate"
+                  class="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm cursor-pointer"
+                />
+                <button
+                  type="button"
+                  (click)="triggerDatePicker(admDateInput)"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 focus:outline-none"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Previous School Details -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Previous School Details
+              </label>
+              <input
+                type="text"
+                formControlName="previousSchool"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- Tab 3: Contact & Health -->
+        <div *ngIf="activeTab === 3" class="space-y-6">
+          <h3
+            class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2"
+          >
+            3. Contact & Physical Health
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Mobile Number</label
+              >
+              <input
+                type="tel"
+                formControlName="mobileNo"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('mobileNo'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+              <p
+                *ngIf="isInvalid('mobileNo')"
+                class="mt-1 text-xs text-rose-500"
+              >
+                Please enter a valid phone number (10 to 15 digits).
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Email Address</label
+              >
+              <input
+                type="email"
+                formControlName="email"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('email'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+              <p *ngIf="isInvalid('email')" class="mt-1 text-xs text-rose-500">
+                Please enter a valid email address.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Measurement Date</label
+              >
+              <div class="relative">
+                <input
+                  #measDateInput
+                  type="date"
+                  formControlName="measurementDate"
+                  class="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm cursor-pointer"
+                />
+                <button
+                  type="button"
+                  (click)="triggerDatePicker(measDateInput)"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 focus:outline-none"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Height (cm)</label
+              >
+              <input
+                type="number"
+                formControlName="height"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Weight (kg)</label
+              >
+              <input
+                type="number"
+                formControlName="weight"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Address Details -->
+        <div *ngIf="activeTab === 4" class="space-y-6">
+          <h3
+            class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2"
+          >
+            4. Address Details
+          </h3>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Current Address</label
+              >
+              <textarea
+                formControlName="currentAddress"
+                rows="3"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              ></textarea>
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="sameAsCurrent"
+                formControlName="sameAsCurrentAddress"
+                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
+              />
+              <label
+                for="sameAsCurrent"
+                class="ml-2 text-sm text-gray-700 font-medium cursor-pointer"
+              >
+                Permanent Address same as Current Address
+              </label>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Permanent Address</label
+              >
+              <textarea
+                formControlName="permanentAddress"
+                rows="3"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm disabled:bg-gray-100 disabled:text-gray-500"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Parent & Guardian Details -->
+        <div *ngIf="activeTab === 5" class="space-y-6">
+          <h3
+            class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2"
+          >
+            5. Parent & Guardian Details
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Father Name</label
+              >
+              <input
+                type="text"
+                formControlName="fatherName"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Father Phone</label
+              >
+              <input
+                type="tel"
+                formControlName="fatherPhone"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('fatherPhone'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Father Occupation</label
+              >
+              <input
+                type="text"
+                formControlName="fatherOcc"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Mother Name</label
+              >
+              <input
+                type="text"
+                formControlName="motherName"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Mother Phone</label
+              >
+              <input
+                type="tel"
+                formControlName="motherPhone"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                    isInvalid('motherPhone'),
+                }"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Mother Occupation</label
+              >
+              <input
+                type="text"
+                formControlName="motherOcc"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-gray-200">
+            <h4 class="text-md font-medium text-gray-700 mb-3">
+              Guardian Information
+            </h4>
+
+            <div class="flex items-center space-x-6 mb-4">
+              <span class="text-sm font-semibold text-gray-700"
+                >Guardian Is:</span
+              >
+              <label
+                *ngFor="let option of guardianTypes"
+                class="inline-flex items-center text-sm text-gray-700 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  [value]="option"
+                  formControlName="guardianIs"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 cursor-pointer"
+                />
+                <span class="ml-2 capitalize">{{ option.toLowerCase() }}</span>
+              </label>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Guardian Name <span class="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  formControlName="guardianName"
+                  [ngClass]="{
+                    'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                      isInvalid('guardianName'),
+                  }"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                />
+                <p
+                  *ngIf="isInvalid('guardianName')"
+                  class="mt-1 text-xs text-rose-500"
+                >
+                  Guardian name is required.
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Guardian Relation <span class="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  formControlName="guardianRelation"
+                  [ngClass]="{
+                    'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                      isInvalid('guardianRelation'),
+                  }"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                />
+                <p
+                  *ngIf="isInvalid('guardianRelation')"
+                  class="mt-1 text-xs text-rose-500"
+                >
+                  Guardian relation is required.
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Guardian Phone <span class="text-rose-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  formControlName="guardianPhone"
+                  [ngClass]="{
+                    'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                      isInvalid('guardianPhone'),
+                  }"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                />
+                <p
+                  *ngIf="isInvalid('guardianPhone')"
+                  class="mt-1 text-xs text-rose-500"
+                >
+                  Valid guardian phone number is required.
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Guardian Occupation</label
+                >
+                <input
+                  type="text"
+                  formControlName="guardianOccupation"
+                  [ngClass]="{
+                    'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                      isInvalid('guardianoOccupation'),
+                  }"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                />
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Guardian Email</label
+                >
+                <input
+                  type="email"
+                  formControlName="guardianEmail"
+                  [ngClass]="{
+                    'border-rose-500 focus:ring-rose-500 focus:border-rose-500':
+                      isInvalid('guardianEmail'),
+                  }"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                />
+                <p
+                  *ngIf="isInvalid('guardianEmail')"
+                  class="mt-1 text-xs text-rose-500"
+                >
+                  Please enter a valid email address.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 6: Financial & Misc -->
+        <div *ngIf="activeTab === 6" class="space-y-6">
+          <h3
+            class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2"
+          >
+            6. Financial & Miscellaneous
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Bank Name</label
+              >
+              <input
+                type="text"
+                formControlName="bankName"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Bank Account Number</label
+              >
+              <input
+                type="text"
+                formControlName="bankAccountNo"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >IFSC Code</label
+              >
+              <input
+                type="text"
+                formControlName="ifscCode"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >National ID Number</label
+              >
+              <input
+                type="text"
+                formControlName="nationalIdentificationNo"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Local ID Number</label
+              >
+              <input
+                type="text"
+                formControlName="localIdentificationNo"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="rte"
+              formControlName="rte"
+              class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
+            />
+            <label
+              for="rte"
+              class="ml-2 text-sm text-gray-700 font-medium cursor-pointer"
+            >
+              RTE (Right to Education) Student
+            </label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Notes / Remarks</label
+            >
+            <textarea
+              formControlName="note"
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Action Buttons Footer -->
+        <div
+          class="mt-8 pt-5 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4"
+        >
+          <div class="flex gap-2 w-full sm:w-auto">
+            <button
+              type="button"
+              (click)="prevTab()"
+              [disabled]="activeTab === 1"
+              class="w-1/2 sm:w-auto px-4 py-2 bg-gray-200 text-gray-700 font-medium text-sm rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              (click)="nextTab()"
+              [disabled]="activeTab === steps.length"
+              class="w-1/2 sm:w-auto px-4 py-2 bg-indigo-600 text-white font-medium text-sm rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              Next
+            </button>
+          </div>
+
+          <div class="flex gap-2 w-full sm:w-auto justify-end">
+            <button
+              type="button"
+              (click)="onReset()"
+              [disabled]="isSubmitting"
+              class="px-4 py-2 border border-rose-300 text-rose-600 font-medium text-sm rounded-lg hover:bg-rose-50 disabled:opacity-50 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-400"
+            >
+              Reset
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSubmitting"
+              class="px-5 py-2 bg-emerald-600 text-white font-medium text-sm rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors inline-flex items-center focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              <svg
+                *ngIf="isSubmitting"
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Save Student Record
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

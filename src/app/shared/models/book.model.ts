@@ -13,10 +13,10 @@ export interface BookRequestDto {
   subject?: string;
   qty: number;
   availableQty: number;
-  price?: number;
+  price?: number | null;
   postDate?: string;
-  description?: string;
   rackCode?: string;
+  description?: string;
 }
 
 export interface BookResponseDto {
@@ -31,8 +31,8 @@ export interface BookResponseDto {
   availableQty: number;
   price?: number;
   postDate?: string;
-  description?: string;
   rackCode?: string;
+  description?: string;
 }
 
 export interface Page<T> {
@@ -41,4 +41,7 @@ export interface Page<T> {
   totalPages: number;
   size: number;
   number: number;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
 }

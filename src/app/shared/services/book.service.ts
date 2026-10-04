@@ -1,19 +1,21 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, map } from "rxjs";
+
 import {
   BookRequestDto,
   BookResponseDto,
   Page,
   RackDto,
 } from "../models/book.model";
+import { environment } from "../../../environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class BookService {
-  private apiUrl = "http://localhost:8080/api/books";
-  private rackUrl = "http://localhost:8080/api/racks";
+  private readonly apiUrl = `${environment.apiUrl}/books`;
+  private readonly rackUrl = `${environment.apiUrl}/racks`;
 
   constructor(private http: HttpClient) {}
 
@@ -40,16 +42,15 @@ export class BookService {
       rackCode?: string;
     },
     page: number = 0,
-    size: number = 50,
+    size: number = 25,
   ): Observable<Page<BookResponseDto>> {
     let httpParams = new HttpParams()
       .set("page", page.toString())
       .set("size", size.toString());
 
-    Object.keys(params).forEach((key) => {
-      const val = (params as any)[key];
-      if (val !== undefined && val !== null && val !== "") {
-        httpParams = httpParams.set(key, val);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value.trim() !== "") {
+        httpParams = httpParams.set(key, value.trim());
       }
     });
 
@@ -58,7 +59,18 @@ export class BookService {
     });
   }
 
+  /**
+   * Fetches all racks.
+   * Handles both plain array (List<RackDto>) and paginated Spring responses (Page<RackDto>).
+   */
   getRacks(): Observable<RackDto[]> {
-    return this.http.get<RackDto[]>(this.rackUrl);
+    return this.http.get<any>(`${this.rackUrl}/search?size=1000`).pipe(
+      map((response) => {
+        if (Array.isArray(response)) {
+          return response;
+        }
+        return response?.content || [];
+      }),
+    );
   }
 }

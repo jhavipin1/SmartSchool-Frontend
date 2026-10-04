@@ -1,9 +1,11 @@
 <div>
-  <!-- Section Title -->
+  <!-- Header -->
   <div
     class="flex justify-between items-center pb-3 border-b border-slate-100 mb-4"
   >
-    <h3 class="text-base font-semibold text-slate-800">Add New Book</h3>
+    <h3 class="text-base font-semibold text-slate-800">
+      {{ editData ? "Edit Book" : "Add New Book" }}
+    </h3>
     <button
       type="button"
       (click)="closeForm()"
@@ -11,6 +13,14 @@
     >
       &times; Close Form
     </button>
+  </div>
+
+  <!-- Alert Banner -->
+  <div
+    *ngIf="errorMessage"
+    class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded"
+  >
+    {{ errorMessage }}
   </div>
 
   <!-- Form Fields -->
@@ -33,7 +43,7 @@
           "
           class="text-[11px] text-red-500 mt-1 block"
         >
-          Book title is required
+          Title is required (max 150 characters)
         </span>
       </div>
 
@@ -70,6 +80,15 @@
           placeholder="e.g. 978-3-16-148410-0"
           class="w-full h-9 px-3 border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
         />
+        <span
+          *ngIf="
+            bookForm.get('isbnNumber')?.invalid &&
+            bookForm.get('isbnNumber')?.touched
+          "
+          class="text-[11px] text-red-500 mt-1 block"
+        >
+          Invalid ISBN format
+        </span>
       </div>
 
       <!-- Publisher -->
@@ -113,17 +132,28 @@
 
       <!-- Rack Selection -->
       <div>
-        <label class="block text-xs font-medium text-slate-700 mb-1"
-          >Rack Number</label
+        <label
+          for="rackCode"
+          class="block text-xs font-medium text-slate-700 mb-1"
         >
+          Rack Number
+        </label>
         <select
+          id="rackCode"
           formControlName="rackCode"
-          class="w-full h-9 px-3 bg-white border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          class="w-full h-9 px-3 bg-white border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-slate-100 disabled:cursor-not-allowed"
         >
-          <option value="">Select Rack</option>
+          <option [value]="''" disabled selected>Select Rack</option>
+
+          <!-- Optional: Placeholder when no racks are available -->
+          <option *ngIf="racks.length === 0" [value]="''" disabled>
+            No racks available
+          </option>
+
+          <!-- Rack List -->
           <option *ngFor="let rack of racks" [value]="rack.rackCode">
-            {{ rack.rackCode }}
-            {{ rack.location ? "(" + rack.location + ")" : "" }}
+            {{ rack.rackCode
+            }}{{ rack.location ? " (" + rack.location + ")" : "" }}
           </option>
         </select>
       </div>
@@ -131,7 +161,7 @@
       <!-- Price -->
       <div>
         <label class="block text-xs font-medium text-slate-700 mb-1"
-          >Price</label
+          >Price ($)</label
         >
         <input
           type="number"
@@ -140,12 +170,20 @@
           placeholder="0.00"
           class="w-full h-9 px-3 border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
         />
+        <span
+          *ngIf="
+            bookForm.get('price')?.invalid && bookForm.get('price')?.touched
+          "
+          class="text-[11px] text-red-500 mt-1 block"
+        >
+          Price cannot be negative
+        </span>
       </div>
 
       <!-- Quantity -->
       <div>
         <label class="block text-xs font-medium text-slate-700 mb-1">
-          Quantity <span class="text-red-500">*</span>
+          Total Quantity <span class="text-red-500">*</span>
         </label>
         <input
           type="number"
@@ -204,9 +242,11 @@
       <button
         type="submit"
         [disabled]="isSubmitting"
-        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded shadow-sm transition disabled:opacity-50"
+        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded shadow-sm transition disabled:opacity-50 flex items-center gap-1"
       >
-        {{ isSubmitting ? "Saving..." : "Save Book" }}
+        <span>{{
+          isSubmitting ? "Saving..." : editData ? "Update Book" : "Save Book"
+        }}</span>
       </button>
     </div>
   </form>

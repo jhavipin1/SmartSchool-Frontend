@@ -1,76 +1,103 @@
 <div class="p-2.5 bg-slate-100 min-h-screen text-slate-700 text-xs font-sans">
+  <!-- Loading Indicator Overlay -->
+  <div
+    *ngIf="isLoading"
+    class="fixed inset-0 bg-slate-900/20 backdrop-blur-xs flex items-center justify-center z-50"
+  >
+    <div class="bg-white p-4 rounded shadow-md flex items-center gap-3">
+      <div
+        class="w-5 h-5 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"
+      ></div>
+      <span class="text-xs font-medium text-slate-700"
+        >Searching student records...</span
+      >
+    </div>
+  </div>
+
   <!-- Select Criteria Container -->
   <div class="bg-white rounded border border-slate-200 shadow-2xs p-3 mb-2.5">
     <h2 class="text-sm font-semibold text-slate-800 mb-2">Select Criteria</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-      <!-- Class Dropdown -->
-      <div class="md:col-span-3">
-        <label class="block font-medium text-slate-600 mb-0.5">
-          Class <span class="text-red-500">*</span>
-        </label>
-        <select
-          [(ngModel)]="selectedClass"
-          class="w-full bg-white border border-slate-300 rounded py-1 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
-        >
-          <option *ngFor="let cls of classList" [value]="cls">{{ cls }}</option>
-        </select>
+      <!-- Filter By Class & Section Section -->
+      <div class="md:col-span-5 grid grid-cols-2 gap-2">
+        <!-- Class Dropdown -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-0.5">
+            Class <span class="text-red-500">*</span>
+          </label>
+          <select
+            [(ngModel)]="selectedClassId"
+            (change)="onClassChange()"
+            class="w-full bg-white border border-slate-300 rounded py-1 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          >
+            <option [ngValue]="null">Select Class</option>
+            <option *ngFor="let cls of classList" [ngValue]="cls.id">
+              {{ cls.className || cls.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Section Dropdown -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-0.5">Section</label>
+          <select
+            [(ngModel)]="selectedSectionId"
+            [disabled]="!selectedClassId"
+            class="w-full bg-white border border-slate-300 rounded py-1 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-slate-100 disabled:cursor-not-allowed"
+          >
+            <option [ngValue]="null">Select Section</option>
+            <option *ngFor="let sec of availableSections" [ngValue]="sec.id">
+              {{ sec.sectionName || sec.name }}
+            </option>
+          </select>
+        </div>
       </div>
 
-      <!-- Section Dropdown -->
-      <div class="md:col-span-3">
-        <label class="block font-medium text-slate-600 mb-0.5">Section</label>
-        <select
-          [(ngModel)]="selectedSection"
-          class="w-full bg-white border border-slate-300 rounded py-1 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+      <!-- Filter Search Button -->
+      <div class="md:col-span-1 flex justify-start">
+        <button
+          (click)="onFilterSearch()"
+          [disabled]="!selectedClassId"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-medium py-1 px-2 rounded shadow-2xs inline-flex items-center justify-center gap-1 transition cursor-pointer disabled:cursor-not-allowed"
         >
-          <option *ngFor="let sec of sectionList" [value]="sec">
-            {{ sec }}
-          </option>
-        </select>
+          <svg
+            class="w-3 h-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          Filter
+        </button>
       </div>
 
       <!-- Keyword Search Field -->
-      <div class="md:col-span-6">
+      <div class="md:col-span-5">
         <label class="block font-medium text-slate-600 mb-0.5"
           >Search By Keyword</label
         >
         <input
           type="text"
           [(ngModel)]="keywordSearch"
-          placeholder="Search By Student Name, Roll Number, Enroll Number, National Id, Local Id"
+          (keyup.enter)="onKeywordSearch()"
+          placeholder="Search by Name, Admission No, Roll No..."
           class="w-full bg-white border border-slate-300 rounded py-1 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder-slate-400"
         />
       </div>
 
-      <!-- Left Criteria Action Button -->
-      <div class="md:col-span-6 flex justify-end">
-        <button
-          (click)="onFilterSearch()"
-          class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1 px-3 rounded shadow-2xs inline-flex items-center gap-1 transition"
-        >
-          <svg
-            class="w-3 h-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          Search
-        </button>
-      </div>
-
-      <!-- Right Keyword Action Button -->
-      <div class="md:col-span-6 flex justify-end">
+      <!-- Keyword Search Action Button -->
+      <div class="md:col-span-1 flex justify-start">
         <button
           (click)="onKeywordSearch()"
-          class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1 px-3 rounded shadow-2xs inline-flex items-center gap-1 transition"
+          [disabled]="!keywordSearch.trim()"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-medium py-1 px-2 rounded shadow-2xs inline-flex items-center justify-center gap-1 transition cursor-pointer disabled:cursor-not-allowed"
         >
           <svg
             class="w-3 h-3"
@@ -82,7 +109,7 @@
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
           Search
@@ -96,99 +123,101 @@
     class="bg-white rounded border border-slate-200 shadow-2xs overflow-hidden"
   >
     <!-- Tab Navigation -->
-    <div class="border-b border-slate-200 bg-slate-50 px-2 pt-1.5 flex gap-2">
-      <button
-        (click)="activeTab = 'list'"
-        [ngClass]="
-          activeTab === 'list'
-            ? 'border-indigo-600 text-indigo-600 font-semibold bg-white border-t border-x rounded-t -mb-px'
-            : 'text-slate-600 hover:text-indigo-600 border-transparent'
-        "
-        class="py-1 px-3 text-xs inline-flex items-center gap-1.5 border-b-2 transition"
-      >
-        <svg
-          class="w-3.5 h-3.5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+    <div
+      class="border-b border-slate-200 bg-slate-50 px-2 pt-1.5 flex justify-between items-center"
+    >
+      <div class="flex gap-2">
+        <button
+          (click)="activeTab = 'list'"
+          [ngClass]="
+            activeTab === 'list'
+              ? 'border-indigo-600 text-indigo-600 font-semibold bg-white border-t border-x rounded-t -mb-px'
+              : 'text-slate-600 hover:text-indigo-600 border-transparent'
+          "
+          class="py-1 px-3 text-xs inline-flex items-center gap-1.5 border-b-2 transition cursor-pointer"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 10h16M4 14h16M4 18h16"
-          />
-        </svg>
-        List View
-      </button>
+          <svg
+            class="w-3.5 h-3.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 10h16M4 14h16M4 18h16"
+            />
+          </svg>
+          List View
+        </button>
+
+        <button
+          (click)="activeTab = 'details'"
+          [ngClass]="
+            activeTab === 'details'
+              ? 'border-indigo-600 text-indigo-600 font-semibold bg-white border-t border-x rounded-t -mb-px'
+              : 'text-slate-600 hover:text-indigo-600 border-transparent'
+          "
+          class="py-1 px-3 text-xs inline-flex items-center gap-1.5 border-b-2 transition cursor-pointer"
+        >
+          <svg
+            class="w-3.5 h-3.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+            />
+          </svg>
+          Details View
+        </button>
+      </div>
 
       <button
-        (click)="activeTab = 'details'"
-        [ngClass]="
-          activeTab === 'details'
-            ? 'border-indigo-600 text-indigo-600 font-semibold bg-white border-t border-x rounded-t -mb-px'
-            : 'text-slate-600 hover:text-indigo-600 border-transparent'
-        "
-        class="py-1 px-3 text-xs inline-flex items-center gap-1.5 border-b-2 transition"
+        *ngIf="hasSearched"
+        (click)="resetFilters()"
+        class="text-xs text-indigo-600 hover:text-indigo-800 font-medium px-2 py-1 cursor-pointer"
       >
-        <svg
-          class="w-3.5 h-3.5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-          />
-        </svg>
-        Details View
+        Clear Search & Filters
       </button>
     </div>
 
     <!-- LIST VIEW CONTENT -->
     <div *ngIf="activeTab === 'list'" class="p-2.5">
-      <!-- Table Filter Header -->
+      <!-- Table Header Bar (Visible after search) -->
       <div
+        *ngIf="hasSearched"
         class="flex flex-col sm:flex-row justify-between items-center gap-2 mb-2"
       >
         <input
           type="text"
           [(ngModel)]="tableSearchText"
-          (input)="onTableSearch()"
-          placeholder="Search"
-          class="border border-slate-300 rounded py-1 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 w-full sm:w-48"
+          (input)="onClientSideTableSearch()"
+          placeholder="Filter displayed rows..."
+          class="border border-slate-300 rounded py-1 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 w-full sm:w-64"
         />
 
-        <div class="flex items-center gap-2">
-          <select
-            [(ngModel)]="pageSize"
-            class="border border-slate-300 rounded py-0.5 px-1 text-xs focus:outline-none"
-          >
-            <option [value]="50">50</option>
-            <option [value]="100">100</option>
-          </select>
+        <div class="flex items-center gap-3">
+          <div class="text-xs text-slate-500 font-medium">
+            Total Records Found: {{ displayStudents.length }}
+          </div>
 
-          <!-- Export Action Icons -->
-          <div class="flex items-center gap-1 text-slate-500">
+          <!-- Export Actions -->
+          <div
+            class="flex items-center gap-1 text-slate-500 border-l pl-2 border-slate-200"
+          >
             <button
-              title="Excel Export"
-              class="p-0.5 hover:text-indigo-600 transition"
-            >
-              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                  d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM6 20V4h7v5h5v11H6z"
-                />
-              </svg>
-            </button>
-            <button
-              title="Copy / CSV"
-              class="p-0.5 hover:text-indigo-600 transition"
+              (click)="exportToCSV()"
+              title="Export CSV"
+              class="p-1 hover:text-indigo-600 transition cursor-pointer"
             >
               <svg
-                class="w-3.5 h-3.5"
+                class="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -202,29 +231,12 @@
               </svg>
             </button>
             <button
-              title="PDF Export"
-              class="p-0.5 hover:text-indigo-600 transition"
+              (click)="printPage()"
+              title="Print List"
+              class="p-1 hover:text-indigo-600 transition cursor-pointer"
             >
               <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                />
-              </svg>
-            </button>
-            <button
-              title="Print"
-              class="p-0.5 hover:text-indigo-600 transition"
-            >
-              <svg
-                class="w-3.5 h-3.5"
+                class="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -241,56 +253,65 @@
         </div>
       </div>
 
-      <!-- High-Density Minimal Padding Table -->
-      <div class="overflow-x-auto border border-slate-200 rounded">
+      <!-- High-Density Scrollable Table Wrapper -->
+      <div
+        class="max-h-[600px] overflow-y-auto border border-slate-200 rounded relative shadow-inner"
+      >
         <table class="w-full text-left border-collapse">
-          <thead>
-            <tr
-              class="bg-slate-50 border-b border-slate-200 text-slate-700 font-semibold"
-            >
-              <th class="py-1.5 px-2">Admission No ⇅</th>
-              <th class="py-1.5 px-2">Student Name ⇅</th>
-              <th class="py-1.5 px-2">Roll No. ⇅</th>
-              <th class="py-1.5 px-2">Class ⇅</th>
-              <th class="py-1.5 px-2">Father Name ⇅</th>
-              <th class="py-1.5 px-2">Date Of Birth ⇅</th>
-              <th class="py-1.5 px-2">Gender ⇅</th>
-              <th class="py-1.5 px-2">Category ⇅</th>
-              <th class="py-1.5 px-2">Mobile Number ⇅</th>
-              <th class="py-1.5 px-2 text-right">Action</th>
+          <thead class="sticky top-0 z-10 bg-slate-100 shadow-xs">
+            <tr class="border-b border-slate-200 text-slate-700 font-semibold">
+              <th class="py-2 px-2 bg-slate-100">Admission No</th>
+              <th class="py-2 px-2 bg-slate-100">Student Name</th>
+              <th class="py-2 px-2 bg-slate-100">Roll No.</th>
+              <th class="py-2 px-2 bg-slate-100">Class</th>
+              <th class="py-2 px-2 bg-slate-100">Father Name</th>
+              <th class="py-2 px-2 bg-slate-100">Gender</th>
+              <th class="py-2 px-2 bg-slate-100">Mobile Number</th>
+              <th class="py-2 px-2 bg-slate-100 text-right">Action</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
+            <!-- Data Rows -->
             <tr
-              *ngFor="let item of filteredStudents"
-              class="hover:bg-slate-50/80 transition"
+              *ngFor="let item of displayStudents; trackBy: trackByStudentId"
+              class="hover:bg-slate-50 transition"
             >
-              <td class="py-1.5 px-2 text-slate-600">{{ item.admissionNo }}</td>
+              <td class="py-1.5 px-2 text-slate-600">
+                {{ item?.admissionNumber || "N/A" }}
+              </td>
               <td class="py-1.5 px-2">
                 <a
+                  (click)="onViewStudent(item)"
                   href="javascript:void(0)"
                   class="text-indigo-600 hover:underline font-medium"
                 >
-                  {{ item.studentName }}
+                  {{ item?.firstName }}
+                  {{ item?.middleName ? item.middleName + " " : ""
+                  }}{{ item?.lastName }}
                 </a>
               </td>
-              <td class="py-1.5 px-2 text-slate-600">{{ item.rollNo }}</td>
               <td class="py-1.5 px-2 text-slate-600">
-                {{ item.class }}({{ item.section }})
+                {{ item?.rollNumber || "N/A" }}
               </td>
-              <td class="py-1.5 px-2 text-slate-600">{{ item.fatherName }}</td>
-              <td class="py-1.5 px-2 text-slate-600">{{ item.dateOfBirth }}</td>
-              <td class="py-1.5 px-2 text-slate-600">{{ item.gender }}</td>
-              <td class="py-1.5 px-2 text-slate-600">{{ item.category }}</td>
               <td class="py-1.5 px-2 text-slate-600">
-                {{ item.mobileNumber }}
+                {{ item?.className || "N/A" }}
+                <span *ngIf="item?.sectionName">({{ item.sectionName }})</span>
+              </td>
+              <td class="py-1.5 px-2 text-slate-600">
+                {{ item?.fatherName || "N/A" }}
+              </td>
+              <td class="py-1.5 px-2 text-slate-600">
+                {{ item?.gender || "N/A" }}
+              </td>
+              <td class="py-1.5 px-2 text-slate-600">
+                {{ item?.mobileNo || "N/A" }}
               </td>
               <td class="py-1.5 px-2 text-right">
                 <div class="inline-flex items-center gap-1">
                   <button
                     (click)="onViewStudent(item)"
                     title="View Details"
-                    class="p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded"
+                    class="p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded cursor-pointer"
                   >
                     <svg
                       class="w-3 h-3"
@@ -302,14 +323,20 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M4 6h16M4 12h16M4 18h16"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                       />
                     </svg>
                   </button>
                   <button
                     (click)="onEditStudent(item)"
                     title="Edit"
-                    class="p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded"
+                    class="p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded cursor-pointer"
                   >
                     <svg
                       class="w-3 h-3"
@@ -326,16 +353,9 @@
                     </svg>
                   </button>
                   <button
-                    (click)="onCollectFees(item)"
-                    title="Collect Fees"
-                    class="p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded leading-none"
-                  >
-                    <span class="text-xs font-bold">$</span>
-                  </button>
-                  <button
-                    (click)="onPrintStudent(item)"
-                    title="Print"
-                    class="p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded"
+                    (click)="onDeleteStudent(item)"
+                    title="Delete"
+                    class="p-1 bg-red-600 hover:bg-red-700 text-white rounded cursor-pointer"
                   >
                     <svg
                       class="w-3 h-3"
@@ -347,59 +367,65 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       />
                     </svg>
                   </button>
                 </div>
               </td>
             </tr>
-            <tr *ngIf="filteredStudents.length === 0">
-              <td colspan="10" class="py-4 text-center text-slate-400">
-                No records found.
+
+            <!-- Initial Prompt State (Before Search) -->
+            <tr *ngIf="!hasSearched && !isLoading">
+              <td colspan="8" class="py-12 text-center text-slate-500">
+                <svg
+                  class="w-8 h-8 mx-auto text-slate-300 mb-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+                <p class="font-medium text-slate-600">No criteria selected</p>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Select a Class or enter a Keyword above and click Search to
+                  display records.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Empty Results State (After Search) -->
+            <tr
+              *ngIf="hasSearched && displayStudents.length === 0 && !isLoading"
+            >
+              <td
+                colspan="8"
+                class="py-8 text-center text-slate-400 font-medium"
+              >
+                No student records found matching your search criteria.
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <!-- Record Count Summary Bar -->
+      <div
+        *ngIf="hasSearched"
+        class="flex items-center justify-between mt-2 pt-2 border-t border-slate-200 text-xs text-slate-500"
+      >
+        <div>Showing {{ displayStudents.length }} entries</div>
+      </div>
     </div>
 
-    <!-- DETAILS VIEW CONTENT (Dynamic Cards View) -->
-    <div
-      *ngIf="activeTab === 'details'"
-      class="p-2.5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5"
-    >
-      <div
-        *ngFor="let item of filteredStudents"
-        class="border border-slate-200 rounded p-2.5 bg-slate-50 flex gap-2"
-      >
-        <div
-          class="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center text-slate-500 font-bold text-sm shrink-0"
-        >
-          {{ item.studentName.charAt(0) }}
-        </div>
-        <div class="flex-1 min-w-0">
-          <h3 class="font-semibold text-indigo-600 truncate">
-            {{ item.studentName }}
-          </h3>
-          <p class="text-slate-500 text-2xs">
-            Class: {{ item.class }} ({{ item.section }}) | Roll:
-            {{ item.rollNo || "N/A" }}
-          </p>
-          <div class="mt-1.5 space-y-0.5 text-2xs text-slate-600">
-            <p>
-              <span class="font-medium">Adm No:</span> {{ item.admissionNo }}
-            </p>
-            <p>
-              <span class="font-medium">Father Name:</span>
-              {{ item.fatherName }}
-            </p>
-            <p>
-              <span class="font-medium">Mobile:</span> {{ item.mobileNumber }}
-            </p>
-          </div>
-        </div>
-      </div>
+    <!-- DETAILS VIEW PLACEHOLDER -->
+    <div *ngIf="activeTab === 'details'" class="p-4 text-center text-slate-500">
+      <p>Select a student from the list view to view full details.</p>
     </div>
   </div>
 </div>

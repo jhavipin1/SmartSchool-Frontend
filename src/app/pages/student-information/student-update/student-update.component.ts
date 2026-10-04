@@ -7,7 +7,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { RouterModule, ActivatedRoute, Router } from "@angular/router";
-import { StudentResponseDto } from "../../../shared/models/library-student.model";
+import { StudentResponseDto } from "../../../shared/models/student.model";
 import {
   Gender,
   Category,

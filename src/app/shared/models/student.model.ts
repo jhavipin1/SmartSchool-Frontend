@@ -1,3 +1,7 @@
+// ==========================================
+// ENUMS
+// ==========================================
+
 export enum Gender {
   MALE = "MALE",
   FEMALE = "FEMALE",
@@ -37,6 +41,51 @@ export enum House {
   YELLOW = "YELLOW",
 }
 
+export enum GuardianType {
+  FATHER = "FATHER",
+  MOTHER = "MOTHER",
+  OTHER = "OTHER",
+}
+
+// ==========================================
+// INTERFACES & DTOS
+// ==========================================
+
+export interface ClassOption {
+  id: number;
+  name?: string;
+  className?: string;
+}
+
+export interface SectionOption {
+  id: number;
+  name?: string;
+  sectionName?: string;
+}
+
+export interface SectionRequestDto {
+  name?: string;
+  sectionName?: string;
+}
+
+export interface ClassWithSectionsRequestDto {
+  className: string;
+  sections: SectionRequestDto[];
+}
+
+export interface SectionResponseDto {
+  id: number;
+  name?: string;
+  sectionName?: string;
+}
+
+export interface ClassNameResponseDto {
+  id: number;
+  name?: string;
+  className?: string;
+  sections: SectionResponseDto[];
+}
+
 export interface StudentRequestDto {
   admissionNumber: string;
   rollNumber?: string;
@@ -49,6 +98,7 @@ export interface StudentRequestDto {
   religion?: Religion;
   bloodGroup?: BloodGroup;
   house?: House;
+  classNameId?: number;
   classId?: number;
   sectionId?: number;
   mobileNo?: string;
@@ -62,11 +112,14 @@ export interface StudentRequestDto {
   motherName?: string;
   motherPhone?: string;
   motherOcc?: string;
+  guardianIs?: GuardianType | string;
   guardianName?: string;
   guardianRelation?: string;
   guardianEmail?: string;
   guardianPhone?: string;
   guardianAddress?: string;
+  guardianOccupation?: string;
+  measurementDate?: string;
   currentAddress?: string;
   permanentAddress?: string;
   bankAccountNo?: string;
@@ -76,18 +129,15 @@ export interface StudentRequestDto {
   localIdentificationNo?: string;
   previousSchool?: string;
   note?: string;
+  rte?: boolean;
 }
 
 export interface StudentResponseDto extends StudentRequestDto {
   id: number;
+  className?: string;
+  sectionName?: string;
   libraryCardNo?: string;
   libraryCardStatus?: string;
-}
-
-export interface Page<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
