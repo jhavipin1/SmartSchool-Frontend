@@ -1,11 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { Subject } from "rxjs";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
-import { AddBookComponent } from "../add-book/add-book.component";
+import { finalize } from "rxjs/operators";
 import { BookResponseDto } from "../../../shared/models/book.model";
 import { BookService } from "../../../shared/services/book.service";
+import { AddBookComponent } from "../add-book/add-book.component";
 
 @Component({
   selector: "app-book-list",
@@ -15,58 +14,97 @@ import { BookService } from "../../../shared/services/book.service";
 })
 export class BookListComponent implements OnInit {
   books: BookResponseDto[] = [];
-  isLoading = false;
   selectedBook: BookResponseDto | null = null;
 
-  // Pagination & Filtering
-  searchTerm = "";
-  pageSize = 50;
-  currentPage = 0;
-  totalElements = 0;
-  totalPages = 0;
-
-  // Search Debounce
-  private searchSubject = new Subject<string>();
-
   showAddForm = false;
+  isLoading = false;
+
+  searchTerm = "";
+  pageSize = 10; // Default to 10 items per page
+  currentPage = 0;
+  totalPages = 0;
+  totalElements = 0;
 
   constructor(private bookService: BookService) {}
 
   ngOnInit(): void {
     this.loadBooks();
-
-    this.searchSubject
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(() => {
-        this.currentPage = 0;
-        this.loadBooks();
-      });
   }
 
   loadBooks(): void {
-    this.isLoading = true;
-    const filter = this.searchTerm.trim()
-      ? { title: this.searchTerm.trim() }
-      : {};
+    // Remove this line to avoid toggling loading UI:
+    // this.isLoading = true;
 
-    this.bookService
-      .searchBooks(filter, this.currentPage, this.pageSize)
-      .subscribe({
-        next: (page) => {
-          this.books = page.content;
-          this.totalElements = page.totalElements;
-          this.totalPages = page.totalPages;
-          this.isLoading = false;
+    if (this.pageSize === 0) {
+      this.bookService.getAllBooksUnpaginated().subscribe({
+        next: (data) => {
+          this.books = data || [];
+          this.totalElements = this.books.length;
         },
-        error: (err) => {
-          console.error("Failed to load books:", err);
-          this.isLoading = false;
-        },
+        error: (err) => console.error("Error loading books:", err),
       });
+    } else {
+      this.bookService.getAllBooks(this.currentPage, this.pageSize).subscribe({
+        next: (res) => {
+          this.books = res?.content || [];
+          this.totalPages = res?.totalPages || 0;
+          this.totalElements = res?.totalElements || 0;
+        },
+        error: (err) => console.error("Error loading books:", err),
+      });
+    }
+
+    // 2. Unpaginated Mode (pageSize === 0)
+    if (this.pageSize === 0) {
+      this.bookService
+        .getAllBooksUnpaginated()
+        .pipe(
+          finalize(() => {
+            this.isLoading = false;
+          }),
+        )
+        .subscribe({
+          next: (data) => {
+            this.books = data || [];
+            this.totalElements = this.books.length;
+            this.totalPages = 1;
+            this.currentPage = 0;
+          },
+          error: (err) => {
+            console.error("Failed to load books:", err);
+            this.books = [];
+            this.totalElements = 0;
+            this.totalPages = 0;
+          },
+        });
+    } else {
+      // 3. Paginated Load Mode (Default 10)
+      this.bookService
+        .getAllBooks(this.currentPage, this.pageSize)
+        .pipe(
+          finalize(() => {
+            this.isLoading = false;
+          }),
+        )
+        .subscribe({
+          next: (res) => {
+            this.books = res?.content || [];
+            this.totalPages = res?.totalPages || 0;
+            this.totalElements = res?.totalElements || 0;
+          },
+          error: (err) => {
+            console.error("Failed to load books:", err);
+            this.books = [];
+            this.totalPages = 0;
+            this.totalElements = 0;
+          },
+        });
+    }
   }
 
   onSearchInput(): void {
-    this.searchSubject.next(this.searchTerm);
+    this.currentPage = 0;
+    this.loadBooks();
   }
 
   onPageSizeChange(): void {
@@ -87,17 +125,8 @@ export class BookListComponent implements OnInit {
   }
 
   editBook(book: BookResponseDto): void {
-    this.selectedBook = book;
+    this.selectedBook = { ...book };
     this.showAddForm = true;
-  }
-
-  deleteBook(bookId: number): void {
-    if (confirm("Are you sure you want to delete this book record?")) {
-      this.bookService.deleteBook(bookId).subscribe({
-        next: () => this.loadBooks(),
-        error: (err) => console.error("Failed to delete book:", err),
-      });
-    }
   }
 
   closeAddForm(): void {
@@ -108,5 +137,14 @@ export class BookListComponent implements OnInit {
   onBookSaved(): void {
     this.closeAddForm();
     this.loadBooks();
+  }
+
+  deleteBook(id: number): void {
+    if (confirm("Are you sure you want to delete this book?")) {
+      this.bookService.deleteBook(id).subscribe({
+        next: () => this.loadBooks(),
+        error: (err) => console.error("Error deleting book:", err),
+      });
+    }
   }
 }

@@ -59,10 +59,11 @@
           (change)="onPageSizeChange()"
           class="h-9 px-2 border border-slate-300 rounded text-xs text-slate-700 focus:outline-none bg-white"
         >
-          <option [value]="10">10 per page</option>
-          <option [value]="25">25 per page</option>
-          <option [value]="50">50 per page</option>
-          <option [value]="100">100 per page</option>
+          <option [ngValue]="10">10 per page (Default)</option>
+          <option [ngValue]="25">25 per page</option>
+          <option [ngValue]="50">50 per page</option>
+          <option [ngValue]="100">100 per page</option>
+          <option [ngValue]="0">All (No Pagination)</option>
         </select>
       </div>
     </div>
@@ -87,6 +88,7 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
+          <!-- Data Rows -->
           <tr *ngFor="let book of books" class="hover:bg-slate-50 transition">
             <td class="py-3 px-4 font-medium text-slate-900">
               {{ book.title }}
@@ -132,36 +134,37 @@
             </td>
           </tr>
 
-          <!-- Empty & Loading States -->
-          <tr *ngIf="books.length === 0 && !isLoading">
+          <!-- Empty State -->
+          <tr *ngIf="!isLoading && books.length === 0">
             <td colspan="10" class="py-8 text-center text-slate-400">
               No book records found.
-            </td>
-          </tr>
-          <tr *ngIf="isLoading">
-            <td colspan="10" class="py-8 text-center text-slate-500">
-              Loading books...
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Pagination Controls -->
+    <!-- Summary & Pagination Footer -->
     <div
-      *ngIf="totalPages > 1"
+      *ngIf="!isLoading && books.length > 0"
       class="flex items-center justify-between pt-4 text-xs text-slate-600"
     >
       <div>
-        Showing {{ currentPage * pageSize + 1 }} to
-        {{
-          (currentPage + 1) * pageSize > totalElements
-            ? totalElements
-            : (currentPage + 1) * pageSize
-        }}
-        of {{ totalElements }} entries
+        <ng-container *ngIf="totalPages > 1; else totalCountOnly">
+          Showing {{ currentPage * pageSize + 1 }} to
+          {{
+            (currentPage + 1) * pageSize > totalElements
+              ? totalElements
+              : (currentPage + 1) * pageSize
+          }}
+          of {{ totalElements }} entries
+        </ng-container>
+        <ng-template #totalCountOnly>
+          Total Books: {{ totalElements || books.length }}
+        </ng-template>
       </div>
-      <div class="flex items-center space-x-1">
+
+      <div *ngIf="totalPages > 1" class="flex items-center space-x-1">
         <button
           (click)="goToPage(currentPage - 1)"
           [disabled]="currentPage === 0"

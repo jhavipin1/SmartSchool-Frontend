@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+
 import { Observable, map } from "rxjs";
 
 import {
@@ -9,6 +9,7 @@ import {
   RackDto,
 } from "../models/book.model";
 import { environment } from "../../../environment";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -18,6 +19,27 @@ export class BookService {
   private readonly rackUrl = `${environment.apiUrl}/racks`;
 
   constructor(private http: HttpClient) {}
+
+  /**
+   * Fetches all books without pagination for initial load.
+   */
+  getAllBooksUnpaginated(): Observable<BookResponseDto[]> {
+    return this.http.get<BookResponseDto[]>(`${this.apiUrl}/all`);
+  }
+
+  /**
+   * Fetches all books using the base GET /api/books endpoint with pagination.
+   */
+  getAllBooks(
+    page: number = 0,
+    size: number = 25,
+  ): Observable<Page<BookResponseDto>> {
+    const params = new HttpParams()
+      .set("page", page.toString())
+      .set("size", size.toString());
+
+    return this.http.get<Page<BookResponseDto>>(this.apiUrl, { params });
+  }
 
   addBook(request: BookRequestDto): Observable<BookResponseDto> {
     return this.http.post<BookResponseDto>(this.apiUrl, request);

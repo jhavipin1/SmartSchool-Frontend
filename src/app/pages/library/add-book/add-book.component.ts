@@ -34,7 +34,9 @@ export class AddBookComponent implements OnInit, OnChanges {
 
   bookForm!: FormGroup;
   racks: RackDto[] = [];
+  books: BookResponseDto[] = []; // Initialized as empty array
   isSubmitting = false;
+  isLoading = false;
   errorMessage = "";
 
   constructor(
@@ -45,6 +47,8 @@ export class AddBookComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.initForm();
     this.loadRacks();
+    this.loadAllBooks();
+
     if (this.editData) {
       this.populateForm(this.editData);
     }
@@ -58,6 +62,20 @@ export class AddBookComponent implements OnInit, OnChanges {
         this.resetForm();
       }
     }
+  }
+
+  loadAllBooks(): void {
+    this.isLoading = true;
+    this.bookService.getAllBooksUnpaginated().subscribe({
+      next: (data) => {
+        this.books = data || [];
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error("Failed to load books:", err);
+        this.isLoading = false;
+      },
+    });
   }
 
   private initForm(): void {
@@ -75,11 +93,10 @@ export class AddBookComponent implements OnInit, OnChanges {
       availableQty: [1, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.min(0)]],
       postDate: [new Date().toISOString().substring(0, 10)],
-      rackCode: [""],
+      rackCode: [null],
       description: ["", [Validators.maxLength(500)]],
     });
 
-    // Automatically sync availableQty when quantity increases in add mode
     this.bookForm.get("qty")?.valueChanges.subscribe((val) => {
       if (!this.editData && val !== null && val >= 0) {
         this.bookForm.patchValue(
@@ -104,7 +121,7 @@ export class AddBookComponent implements OnInit, OnChanges {
       postDate: data.postDate
         ? data.postDate.substring(0, 10)
         : new Date().toISOString().substring(0, 10),
-      rackCode: data.rackCode || "",
+      rackCode: data.rackCode || null,
       description: data.description || "",
     });
   }
@@ -112,7 +129,7 @@ export class AddBookComponent implements OnInit, OnChanges {
   private loadRacks(): void {
     this.bookService.getRacks().subscribe({
       next: (data) => {
-        this.racks = data;
+        this.racks = data || [];
       },
       error: (err) => console.error("Failed to load racks:", err),
     });
@@ -129,6 +146,9 @@ export class AddBookComponent implements OnInit, OnChanges {
 
     const payload: BookRequestDto = {
       ...rawValue,
+      author: rawValue.author?.trim() || null,
+      publisher: rawValue.publisher?.trim() || null,
+      rackCode: rawValue.rackCode || null,
       qty: Number(rawValue.qty ?? 0),
       availableQty: Number(rawValue.availableQty ?? rawValue.qty ?? 0),
       price:
@@ -167,7 +187,7 @@ export class AddBookComponent implements OnInit, OnChanges {
       qty: 1,
       availableQty: 1,
       postDate: new Date().toISOString().substring(0, 10),
-      rackCode: "",
+      rackCode: null,
     });
   }
 

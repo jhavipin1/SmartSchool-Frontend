@@ -143,14 +143,12 @@
           formControlName="rackCode"
           class="w-full h-9 px-3 bg-white border border-slate-300 rounded text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-slate-100 disabled:cursor-not-allowed"
         >
-          <option [value]="''" disabled selected>Select Rack</option>
+          <option [ngValue]="null" disabled selected>Select Rack</option>
 
-          <!-- Optional: Placeholder when no racks are available -->
-          <option *ngIf="racks.length === 0" [value]="''" disabled>
+          <option *ngIf="racks.length === 0" [ngValue]="null" disabled>
             No racks available
           </option>
 
-          <!-- Rack List -->
           <option *ngFor="let rack of racks" [value]="rack.rackCode">
             {{ rack.rackCode
             }}{{ rack.location ? " (" + rack.location + ")" : "" }}
@@ -161,7 +159,7 @@
       <!-- Price -->
       <div>
         <label class="block text-xs font-medium text-slate-700 mb-1"
-          >Price ($)</label
+          >Price (₹)</label
         >
         <input
           type="number"
